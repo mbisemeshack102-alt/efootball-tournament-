@@ -1,22 +1,43 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { supabase } from '@/lib/supabase';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const notConnected = () => Alert.alert('Muunganisho unasubiri', 'Login ya Supabase itawashwa baada ya kuweka Project URL na Publishable Key.');
+  const [loading, setLoading] = useState(false);
+
+  const login = async () => {
+    if (!supabase) {
+      Alert.alert('Supabase haijawekwa', 'Weka Project URL na Publishable Key kwenye efootball-app/.env kisha anzisha app upya.');
+      return;
+    }
+    if (!email.trim() || !password) {
+      Alert.alert('Jaza taarifa', 'Weka email na password yako.');
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setLoading(false);
+    if (error) {
+      Alert.alert('Imeshindikana kuingia', error.message);
+      return;
+    }
+    router.replace('/');
+  };
+
   return (
     <View style={styles.screen}>
       <Text style={styles.kicker}>KICKOFF WINS GIFTS</Text>
       <Text style={styles.title}>Karibu tena</Text>
       <Text style={styles.subtitle}>Ingia kwenye akaunti yako ya mashindano.</Text>
-      <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#7D8DA0" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} />
+      <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#7D8DA0" keyboardType="email-address" autoCapitalize="none" autoCorrect={false} value={email} onChangeText={setEmail} />
       <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#7D8DA0" secureTextEntry value={password} onChangeText={setPassword} />
-      <TouchableOpacity style={styles.primary} onPress={notConnected}><Text style={styles.primaryText}>INGIA</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.primary} onPress={login} disabled={loading}><Text style={styles.primaryText}>{loading ? 'INAINGIA...' : 'INGIA'}</Text></TouchableOpacity>
       <TouchableOpacity onPress={() => router.push('/verify')}><Text style={styles.link}>Nina verification code</Text></TouchableOpacity>
       <TouchableOpacity onPress={() => router.push('/register')}><Text style={styles.link}>Huna akaunti? Jisajili</Text></TouchableOpacity>
-      <Text style={styles.footnote}>Akaunti na nenosiri vitalindwa kupitia huduma salama ya uthibitishaji baada ya kuunganisha Supabase.</Text>
+      <Text style={styles.footnote}>Akaunti yako inalindwa na Supabase Authentication.</Text>
     </View>
   );
 }
