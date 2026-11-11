@@ -203,14 +203,13 @@ insert into public.games (name, slug) values
   ('Free Fire', 'free-fire')
 on conflict (slug) do nothing;
 
-
 -- Prevent players from changing their own role or match statistics.
 create or replace function public.protect_profile_fields()
 returns trigger
 language plpgsql
 security definer
 set search_path = public
-as $
+as $$
 begin
   if auth.uid() = old.id and not public.is_admin() then
     new.role := old.role;
@@ -220,7 +219,7 @@ begin
   new.updated_at := now();
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists protect_profile_fields on public.profiles;
 create trigger protect_profile_fields
