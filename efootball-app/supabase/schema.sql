@@ -203,6 +203,30 @@ insert into public.games (name, slug) values
   ('Free Fire', 'free-fire')
 on conflict (slug) do nothing;
 
+
+-- Prevent players from changing their own role or match statistics.
+create or replace function public.protect_profile_fields()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $
+begin
+  if auth.uid() = old.id and not public.is_admin() then
+    new.role := old.role;
+    new.wins := old.wins;
+    new.losses := old.losses;
+  end if;
+  new.updated_at := now();
+  return new;
+end;
+$;
+
+drop trigger if exists protect_profile_fields on public.profiles;
+create trigger protect_profile_fields
+before update on public.profiles
+for each row execute procedure public.protect_profile_fields();
+
 -- IMPORTANT:
 -- Promote the first trusted administrator manually from the Supabase SQL Editor.
 -- Never allow users to set their own role from the mobile app.
