@@ -2,32 +2,28 @@
 
 Mobile-first esports tournament app built with Expo Router and React Native.
 
-## Supported game categories
-- PUBG Mobile
-- eFootball
-- Free Fire
+## Supabase connection
+1. Create or open the Supabase project intended for KICKOFF WINS GIFTS.
+2. In Supabase SQL Editor, run `supabase/schema.sql` from this app folder.
+3. Copy `.env.example` to `.env` inside `efootball-app`.
+4. Set `EXPO_PUBLIC_SUPABASE_URL` to the Supabase Project URL.
+5. Set `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` to the project's publishable key (starts with `sb_publishable_`).
+6. In Supabase Authentication > Email, configure the confirmation email template to include the 6-digit token using `{{ .Token }}`.
+7. Add the app redirect scheme `kickoffwinsgifts://auth/callback` to the Supabase Auth URL configuration if using email links.
 
-## Current foundation
-- Mobile-first dark gaming dashboard
-- Tournament discovery screen
-- Login, registration and email verification-code screens (UI foundation)
-- Updates, player chat and settings screens
-- Supabase PostgreSQL schema with Row Level Security policies
+Never put a Supabase Secret or `service_role` key in the mobile app or GitHub.
 
-## Supabase setup
-1. Create a Supabase project.
-2. Open the SQL Editor and run `supabase/schema.sql`.
-3. Copy `.env.example` to `.env`.
-4. Set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-5. Never put a Supabase Secret or `service_role` key in the mobile app or GitHub.
-
-Authentication, realtime chat, notifications and tournament actions are not active until the Supabase project is connected and the client integration is completed.
+## Included
+- Supabase client with persisted mobile sessions
+- Email/password login
+- Player registration with username metadata
+- Six-digit email OTP verification and resend
+- Starter schema for profiles, games, tournaments, participants, matches, chat and updates with RLS
 
 ## Run locally
 ```bash
 npm install
 npx expo start
-```
+``
 
-## Validation
-Run `npx expo lint` and `npx tsc --noEmit` before release.
+The app must be restarted after changing environment variables. Realtime chat, payments, push notifications and production release signing need separate setup.
