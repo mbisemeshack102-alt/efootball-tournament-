@@ -1,0 +1,43 @@
+name: Build KICKOFF WINS GIFTS Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kickoff-wins-gifts-foundation
+    paths:
+      - "efootball-app/**"
+      - ".github/workflows/android-apk.yml"
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: efootball-app
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: efootball-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Link EAS project
+        run: npx eas-cli@latest init --force --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Android APK
+        run: npx eas-cli@latest build --platform android --profile production --non-interactive --wait
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
