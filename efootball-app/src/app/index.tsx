@@ -1,10 +1,14 @@
 import { router } from 'expo-router';
+import SportsLogo from '@/components/sports-logo';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const games = [
   { name: 'PUBG Mobile', detail: 'Battle Royale tournaments', icon: '🎯' },
   { name: 'eFootball', detail: 'Football competitions', icon: '⚽' },
   { name: 'Free Fire', detail: 'Squad and solo events', icon: '🔥' },
+  { name: 'Basketball', detail: 'Basketball tournaments', icon: '🏀' },
+  { name: 'Tennis', detail: 'Singles and doubles', icon: '🎾' },
+  { name: 'Racing & other games', detail: 'Mashindano ya michezo mingine', icon: '🏎️' },
 ];
 
 function ActionCard({ title, detail, onPress }: { title: string; detail: string; onPress: () => void }) {
@@ -20,10 +24,13 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <View>
-          <Text style={styles.eyebrow}>MOBILE ESPORTS • TANZANIA</Text>
-          <Text style={styles.brand}>KICKOFF <Text style={styles.accent}>WINS</Text></Text>
-          <Text style={styles.brand}>GIFTS</Text>
+        <View style={styles.brandGroup}>
+          <SportsLogo size={62} />
+          <View>
+            <Text style={styles.eyebrow}>ALL SPORTS • TANZANIA</Text>
+            <Text style={styles.brand}>KICKOFF <Text style={styles.accent}>WINS</Text></Text>
+            <Text style={styles.brand}>GIFTS</Text>
+          </View>
         </View>
         <TouchableOpacity style={styles.avatar} onPress={() => router.push('/settings')}>
           <Text style={styles.avatarText}>KW</Text>
@@ -76,6 +83,7 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#080D16' },
   content: { padding: 20, paddingTop: 30, paddingBottom: 42 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
+  brandGroup: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   eyebrow: { color: '#91A0B6', fontSize: 10, letterSpacing: 2, fontWeight: '700', marginBottom: 7 },
   brand: { color: '#F4F7FC', fontSize: 24, fontWeight: '900', letterSpacing: 1 },
   accent: { color: '#B8F34A' },
