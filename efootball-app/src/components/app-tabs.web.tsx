@@ -29,8 +29,9 @@ export default function AppTabs() {
 }
 
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+  const { ref: _tabRef, ...pressableProps } = props;
   return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
+    <Pressable {...pressableProps} style={({ pressed }) => pressed ? styles.pressed : undefined}>
       <ThemedView type={isFocused ? 'backgroundSelected' : 'backgroundElement'} style={styles.tabButtonView}>
         <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>{children}</ThemedText>
       </ThemedView>
@@ -46,7 +47,7 @@ export function CustomTabList(props: TabListProps) {
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>KICKOFF WINS GIFTS</ThemedText>
         {props.children}
-        <SymbolView tintColor={colors.text} name={{ ios: 'gamecontroller', web: 'gamepad-2' }} size={15} />
+        <SymbolView tintColor={colors.text} name={{ ios: 'gamecontroller', web: 'gamepad' }} size={15} />
       </ThemedView>
     </View>
   );
