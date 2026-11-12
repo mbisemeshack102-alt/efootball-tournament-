@@ -244,4 +244,7 @@ $("voiceLeave").onclick=leaveVoice;
 
 setInterval(()=>{const e=$("clock");if(e)e.textContent=new Intl.DateTimeFormat("sw-TZ",{timeZone:"Africa/Dar_es_Salaam",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date())},1000);
 const langSelect=$("languageSelect");if(langSelect){const saved=(()=>{try{return localStorage.getItem("kwg-language")}catch(e){return null}})()||"sw";langSelect.value=saved;applyLanguage(saved);langSelect.addEventListener("change",()=>applyLanguage(langSelect.value))}setup();
+if('serviceWorker' in navigator && location.protocol==='https:'){
+ navigator.serviceWorker.register('./sw.js').then(reg=>reg.update()).catch(err=>console.warn('PWA service worker registration failed',err));
+}
 </script></body></html>
