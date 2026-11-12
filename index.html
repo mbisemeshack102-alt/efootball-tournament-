@@ -111,7 +111,7 @@ $("savePastedResults")?.addEventListener("click",async()=>{
  if(profile?.role!=="admin")return message("resultsMsg","Admin pekee anaweza kuhifadhi matokeo.",true);
  const tournament_id=$("resultsTournament").value,raw=$("resultsPaste").value.trim();if(!tournament_id||!raw)return message("resultsMsg","Chagua mashindano na bandika matokeo.",true);
  const rows=raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean);const parsed=[];
- for(let i=0;i<rows.length;i++){const p=rows[i].split(",").map(x=>x.trim());if(p.length!==4||!p[0]||!p[3]||!/^\\d+$/.test(p[1])||!/^\\d+$/.test(p[2]))return message("resultsMsg","Mstari "+(i+1)+" si sahihi. Tumia: Timu A,2,1,Timu B",true);parsed.push({tournament_id,team_a:p[0],score_a:Number(p[1]),score_b:Number(p[2]),team_b:p[3],created_by:user.id})}
+ for(let i=0;i<rows.length;i++){const p=rows[i].split(",").map(x=>x.trim());if(p.length!==4||!p[0]||!p[3]||!/^\d+$/.test(p[1])||!/^\d+$/.test(p[2]))return message("resultsMsg","Mstari "+(i+1)+" si sahihi. Tumia: Timu A,2,1,Timu B",true);parsed.push({tournament_id,team_a:p[0],score_a:Number(p[1]),score_b:Number(p[2]),team_b:p[3],created_by:user.id})}
  const {error}=await db.from("tournament_results").insert(parsed);if(error)message("resultsMsg",error.message,true);else{$("resultsPaste").value="";message("resultsMsg",parsed.length+" matokeo yamehifadhiwa. Msimamo umehesabiwa upya.");await loadResults()}
 });
 
