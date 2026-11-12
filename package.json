@@ -1,0 +1,17 @@
+{
+  "name": "kickoff-wins-gifts-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android APK wrapper for KICKOFF WINS GIFTS",
+  "scripts": {
+    "build:web": "node -e \"const fs=require('fs');fs.rmSync('www',{recursive:true,force:true});fs.mkdirSync('www',{recursive:true});for(const f of ['index.html','manifest.webmanifest','icon.svg'])fs.copyFileSync(f,'www/'+f)\"",
+    "android:sync": "npm run build:web && cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3"
+  }
+}
