@@ -16,7 +16,7 @@ self.addEventListener("push",event=>{
 });
 self.addEventListener("notificationclick",event=>{
  event.notification.close();
- const target=new URL(event.notification.data?.url||"./",self.location.origin).href;
+ const target=new URL(event.notification.data?.url||"./",self.registration.scope).href;
  event.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(list=>{
   for(const client of list){if(new URL(client.url).origin===self.location.origin){client.navigate(target);return client.focus()}}
   return self.clients.openWindow(target);
