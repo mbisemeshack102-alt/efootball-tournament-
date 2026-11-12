@@ -117,3 +117,44 @@ drop policy if exists "Admins update gift claims" on public.gift_claims;
 create policy "Admins update gift claims" on public.gift_claims for update to authenticated
 using (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'))
 with check (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'));
+
+
+-- Tournament format / points algorithm settings
+alter table public.tournaments
+ add column if not exists format text not null default 'round_robin'
+ check (format in ('round_robin','knockout','league')),
+ add column if not exists points_win integer not null default 3 check (points_win between 0 and 10),
+ add column if not exists points_draw integer not null default 1 check (points_draw between 0 and 10),
+ add column if not exists points_loss integer not null default 0 check (points_loss between 0 and 10);
+
+-- Match timetable (stored as timezone-aware timestamp; UI displays Africa/Dar_es_Salaam)
+create table if not exists public.tournament_schedule (
+ id uuid primary key default gen_random_uuid(),
+ tournament_id uuid not null references public.tournaments(id) on delete cascade,
+ title text not null,
+ details text not null default '',
+ starts_at timestamptz not null,
+ created_by uuid not null references public.profiles(id),
+ created_at timestamptz not null default now()
+);
+alter table public.tournament_schedule enable row level security;
+drop policy if exists "Authenticated users view tournament schedule" on public.tournament_schedule;
+create policy "Authenticated users view tournament schedule" on public.tournament_schedule
+ for select to authenticated using (true);
+drop policy if exists "Admins create tournament schedule" on public.tournament_schedule;
+create policy "Admins create tournament schedule" on public.tournament_schedule
+ for insert to authenticated with check (
+  created_by=auth.uid() and exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ );
+drop policy if exists "Admins update tournament schedule" on public.tournament_schedule;
+create policy "Admins update tournament schedule" on public.tournament_schedule
+ for update to authenticated using (
+  exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ ) with check (
+  exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ );
+drop policy if exists "Admins delete tournament schedule" on public.tournament_schedule;
+create policy "Admins delete tournament schedule" on public.tournament_schedule
+ for delete to authenticated using (
+  exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ );
