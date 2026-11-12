@@ -69,10 +69,15 @@ async function loadGifts(){
  const {data,error}=await db.from("gifts").select("id,name,description,status").order("created_at",{ascending:false});
  if(error){$("giftList").textContent="Gift list unavailable: "+error.message;return}
  $("giftAdminPanel").classList.toggle("hidden",profile.role!=="admin");
- const {data:claims}=await db.from("gift_claims").select("id,gift_id,status").eq("player_id",user.id);const mine=claims||[];
- $("giftList").innerHTML=data.length?data.map(g=>{const c=mine.find(x=>x.gift_id===g.id);return '<div class="item"><div><b>'+esc(g.name)+'</b><div class="muted small">'+esc(g.description||"")+'</div><span class="tag">'+esc(c?c.status:g.status)+'</span></div>'+(profile.role==="admin"?'<button class="secondary" data-deliver="'+(c?c.id:"")+'" '+(!c||c.status==="delivered"?"disabled":"")+'>Mark delivered</button>':'<button data-claim="'+g.id+'" '+(c?"disabled":"")+'>'+(c?"Requested":"Claim gift")+'</button>')+'</div>'}).join(""):"Hakuna zawadi zilizowekwa bado.";
+ const claimQuery=profile.role==="admin"?db.from("gift_claims").select("id,gift_id,player_id,status,profiles(display_name)").order("created_at",{ascending:false}):db.from("gift_claims").select("id,gift_id,status").eq("player_id",user.id);
+ const {data:claims,error:claimError}=await claimQuery;if(claimError){$("giftList").textContent="Claims unavailable: "+claimError.message;return}const mine=claims||[];
+ if(profile.role==="admin"){
+  $("giftList").innerHTML=data.map(g=>'<div class="item"><div><b>'+esc(g.name)+'</b><div class="muted small">'+esc(g.description||"")+'</div></div></div>'+mine.filter(c=>c.gift_id===g.id).map(c=>'<div class="item"><div>'+esc(c.profiles?.display_name||"Player")+' • '+esc(c.status)+'</div><button class="secondary" data-deliver="'+c.id+'" '+(c.status==="delivered"?"disabled":"")+'>Mark delivered</button></div>').join("")).join("")||"Hakuna zawadi zilizowekwa bado.";
+ }else{
+  $("giftList").innerHTML=data.map(g=>{const c=mine.find(x=>x.gift_id===g.id);return '<div class="item"><div><b>'+esc(g.name)+'</b><div class="muted small">'+esc(g.description||"")+'</div><span class="tag">'+esc(c?c.status:g.status)+'</span></div><button data-claim="'+g.id+'" '+(c?"disabled":"")+'>'+(c?"Requested":"Claim gift")+'</button></div>'}).join("")||"Hakuna zawadi zilizowekwa bado.";
+ }
  document.querySelectorAll("[data-claim]").forEach(b=>b.onclick=async()=>{const {error}=await db.from("gift_claims").insert({gift_id:b.dataset.claim,player_id:user.id});if(error)alert(error.message);else loadGifts()});
- document.querySelectorAll("[data-deliver]").forEach(b=>b.onclick=async()=>{if(!b.dataset.deliver)return;const {error}=await db.from("gift_claims").update({status:"delivered"}).eq("id",b.dataset.deliver);if(error)alert(error.message);else loadGifts()});
+ document.querySelectorAll("[data-deliver]").forEach(b=>b.onclick=async()=>{const {error}=await db.from("gift_claims").update({status:"delivered"}).eq("id",b.dataset.deliver);if(error)alert(error.message);else loadGifts()});
 }
 $("addGift").onclick=async()=>{const name=$("giftName").value.trim(),description=$("giftValue").value.trim();if(!name)return message("giftAdminMsg","Weka jina la zawadi.",true);const {error}=await db.from("gifts").insert({name,description,created_by:user.id});if(error)message("giftAdminMsg",error.message,true);else{$("giftName").value="";$("giftValue").value="";message("giftAdminMsg","Zawadi imehifadhiwa.");loadGifts()}};
 let voiceChannel=null,voiceStream=null,voicePeers={},voiceRoomKey="",voiceMuted=false;
