@@ -158,3 +158,40 @@ create policy "Admins delete tournament schedule" on public.tournament_schedule
  for delete to authenticated using (
   exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
  );
+
+ 
+-- Online tournaments: unique automatically generated join code for each tournament
+alter table public.tournaments
+ add column if not exists join_code text;
+update public.tournaments set join_code='KWG-'||upper(substr(replace(gen_random_uuid()::text,'-',''),1,8)) where join_code is null;
+alter table public.tournaments alter column join_code set default ('KWG-'||upper(substr(replace(gen_random_uuid()::text,'-',''),1,8)));
+alter table public.tournaments alter column join_code set not null;
+create unique index if not exists tournaments_join_code_unique on public.tournaments(join_code);
+
+-- Match results entered by administrators; standings are calculated by the app from these rows.
+create table if not exists public.tournament_results (
+ id uuid primary key default gen_random_uuid(),
+ tournament_id uuid not null references public.tournaments(id) on delete cascade,
+ team_a text not null,
+ score_a integer not null check(score_a between 0 and 999),
+ score_b integer not null check(score_b between 0 and 999),
+ team_b text not null,
+ created_by uuid not null references public.profiles(id),
+ created_at timestamptz not null default now(),
+ check (length(trim(team_a))>0 and length(trim(team_b))>0),
+ check (lower(trim(team_a))<>lower(trim(team_b)))
+);
+alter table public.tournament_results enable row level security;
+drop policy if exists "Authenticated users view tournament results" on public.tournament_results;
+create policy "Authenticated users view tournament results" on public.tournament_results
+ for select to authenticated using (true);
+drop policy if exists "Admins insert tournament results" on public.tournament_results;
+create policy "Admins insert tournament results" on public.tournament_results
+ for insert to authenticated with check (
+  created_by=auth.uid() and exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ );
+drop policy if exists "Admins delete tournament results" on public.tournament_results;
+create policy "Admins delete tournament results" on public.tournament_results
+ for delete to authenticated using (
+  exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
+ );
