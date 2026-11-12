@@ -41,11 +41,11 @@ sw:{}
 function applyLanguage(lang){
 const dict=translations[lang]||translations.sw;
 document.documentElement.lang=lang;
-document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.getAttribute("data-i18n");if(dict[key])el.textContent=dict[key]});
-document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{const key=el.getAttribute("data-i18n-placeholder");if(dict[key])el.placeholder=dict[key]});
+document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.getAttribute("data-i18n");el.textContent=lang==="sw"?key:(dict[key]||key)});
+document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{const key=el.getAttribute("data-i18n-placeholder");el.placeholder=lang==="sw"?key:(dict[key]||key)});
 const placeholders=lang==="en"?{"email":"Email address","password":"At least 6 characters","newTitle":"Example: Free Fire Weekend Cup","newPassword":"New password","voiceText":"Recognized speech"}:{"email":"jina@email.com","password":"Angalau herufi 6","newTitle":"Mfano: Free Fire Weekend Cup","newPassword":"Nenosiri jipya","voiceText":"Maneno yaliyotambuliwa"};
 Object.entries(placeholders).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.placeholder=value});
-document.querySelectorAll("[data-tab]").forEach(b=>{const key=b.dataset.tab;const names=lang==="en"?{overview:"Overview",tournaments:"Tournaments",players:"Players",gifts:"Gifts",voicechat:"Voice Chat",admin:"Admin",settings:"Settings"}:{overview:"Muhtasari",tournaments:"Mashindano",players:"Wachezaji",gifts:"Zawadi",voicechat:"Voice Chat",admin:"Admin",settings:"Settings"};if(b.dataset.tab!=="")b.textContent=names[key]||b.textContent});
+document.querySelectorAll("[data-tab]").forEach(b=>{const key=b.dataset.tab;const names=lang==="en"?{overview:"Overview",tournaments:"Tournaments",players:"Players",gifts:"Gifts",voicechat:"Voice Chat",admin:"Admin",settings:"Settings"}:{overview:"Muhtasari",tournaments:"Mashindano",players:"Wachezaji",gifts:"Zawadi",voicechat:"Sauti",admin:"Admin",settings:"Mipangilio"};if(b.dataset.tab!=="")b.textContent=names[key]||b.textContent});
 try{localStorage.setItem("kwg-language",lang)}catch(e){}
 }
 function message(id,msg,error=false){const el=$(id);el.textContent=msg;el.classList.remove("hidden","error");if(error)el.classList.add("error")}
