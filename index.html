@@ -70,14 +70,19 @@ function showLoggedOut(){if(voiceChannel||voiceStream)leaveVoice();if(notificati
 let notificationChannel=null;
 function updateNotificationStatus(){
  const el=$("notificationStatus"),btn=$("allowNotifications"),pushBtn=$("enablePushNotifications");
- if(!("Notification" in window)){el.textContent="Browser hii haitoi Web Notifications.";btn.disabled=true;if(pushBtn)pushBtn.disabled=true;return}
- el.textContent=Notification.permission==="granted"?"Notifications zimeruhusiwa":Notification.permission==="denied"?"Notifications zimekataliwa kwenye browser":"Bado hazijawezeshwa";
- btn.textContent=Notification.permission==="granted"?"Notifications Allowed":"Allow Notifications";
- if(pushBtn)pushBtn.disabled=Notification.permission==="denied";
+ if(!("Notification" in window)){el.textContent="Browser hii haitoi notifications. Tumia Chrome iliyosasishwa.";btn.disabled=true;if(pushBtn)pushBtn.disabled=true;return}
+ const p=Notification.permission;
+ el.textContent=p==="granted"?"✅ Notifications zimewashwa kwenye kifaa hiki.":p==="denied"?"⚠️ Ruhusa imekataliwa. Washa kupitia Site settings za Chrome.":"Bado hazijaruhusiwa. Bonyeza Ruhusu notifications.";
+ btn.textContent=p==="granted"?"Notifications zimewashwa":p==="denied"?"Jinsi ya kuruhusu tena":"🔔 Ruhusu notifications";
+ btn.disabled=p==="granted";
+ if(pushBtn){pushBtn.disabled=p==="denied";pushBtn.textContent="📲 Washa notifications hata app ikiwa imefungwa"}
 }
-function sendAppNotification(title,body){
+async function sendAppNotification(title,body){
  if(!("Notification" in window)||Notification.permission!=="granted")return;
- try{new Notification(title,{body,tag:"kwg-update"});}catch(e){console.warn("Notification unavailable",e)}
+ try{
+  if("serviceWorker" in navigator){const reg=await navigator.serviceWorker.ready;await reg.showNotification(title,{body,icon:"./icon.svg",badge:"./icon.svg",tag:"kwg-"+title.slice(0,30),data:{url:"./"}})}
+  else new Notification(title,{body,tag:"kwg-update"});
+ }catch(e){console.warn("Notification unavailable",e)}
 }
 $("allowNotifications")?.addEventListener("click",async()=>{
  if(!("Notification" in window)){updateNotificationStatus();return}
@@ -109,7 +114,7 @@ async function enableBackgroundPush(){
 }
 $("enablePushNotifications")?.addEventListener("click",enableBackgroundPush);
 function startLiveNotifications(){
- if(!db||!user||!("Notification" in window)||notificationChannel)return;
+ if(!db||!user||notificationChannel)return;
  notificationChannel=db.channel("kwg-live-notifications-"+user.id)
  .on("postgres_changes",{event:"INSERT",schema:"public",table:"tournaments"},payload=>{
    const row=payload.new||{};if(row.created_by!==user.id)sendAppNotification("Mashindano mapya",String(row.title||"Mashindano mapya yameongezwa")+" • "+String(row.game||""));
@@ -117,7 +122,16 @@ function startLiveNotifications(){
  .on("postgres_changes",{event:"INSERT",schema:"public",table:"tournament_results"},payload=>{
    const row=payload.new||{};if(row.created_by!==user.id)sendAppNotification("Matokeo mapya",String(row.team_a||"Timu")+" "+String(row.score_a??"")+" - "+String(row.score_b??"")+" "+String(row.team_b||""));
  })
- .subscribe(status=>{if(status==="CHANNEL_ERROR"||status==="TIMED_OUT")console.warn("Live notification subscription unavailable",status)});
+ .on("postgres_changes",{event:"INSERT",schema:"public",table:"tournament_registrations"},payload=>{
+   const row=payload.new||{};if(profile?.role==="admin")sendAppNotification("Mchezaji mpya amejiunga","Usajili mpya wa mashindano umepokelewa.");
+ })
+ .on("postgres_changes",{event:"INSERT",schema:"public",table:"gift_claims"},payload=>{
+   const row=payload.new||{};if(profile?.role==="admin")sendAppNotification("Ombi jipya la zawadi","Mchezaji ameomba zawadi. Fungua dashboard ya Admin.");
+ })
+ .on("postgres_changes",{event:"UPDATE",schema:"public",table:"gift_claims",filter:"player_id=eq."+user.id},payload=>{
+   const row=payload.new||{};if(row.status==="delivered")sendAppNotification("Zawadi imetolewa","Ombi lako la zawadi limewekewa Delivered.");
+ })
+ .subscribe(status=>{if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"){$("notificationStatus").textContent="Live alerts hazijaunganishwa. Hakikisha Realtime imewezeshwa kwenye Supabase.";console.warn("Live notification subscription unavailable",status)}});
 }
 
 async function loadUser(u){user=u;const {data,error}=await db.from("profiles").select("id,display_name,role").eq("id",u.id).single();if(error){message("authMsg","Akaunti imeingia lakini profile haijapatikana. Hakikisha SQL schema imeendeshwa.",true);return}profile=data;updateNotificationStatus();startLiveNotifications();$("tournamentAdminSettings").classList.toggle("hidden",data.role!=="admin");$("welcome").classList.add("hidden");$("app").classList.remove("hidden");$("bottomNav").classList.remove("hidden");$("hello").textContent="Karibu, "+(data.display_name||u.email);$("roleTag").textContent=data.role.toUpperCase();$("adminTab").classList.toggle("hidden",data.role!=="admin");$("topActions").textContent="";await refresh()}
