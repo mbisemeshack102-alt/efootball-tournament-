@@ -31,7 +31,8 @@ Gaming tournament web app for Free Fire, PUBG Mobile, Call of Duty Mobile, eFoot
 - The Admin tab is hidden for players, and Supabase RLS independently blocks non-admin tournament creation/management.
 - Live voice chat requires HTTPS, microphone permission, Supabase Realtime enabled, and a network that permits WebRTC. This first implementation uses a public STUN server only; reliable production voice across restrictive mobile networks needs a TURN service and real multi-device testing.
 - Gift delivery is an admin-recorded status, not an automatic payment or game-currency transfer.
-- Payments, text chat and APK packaging are not included yet.
+- ClickPesa BillPay payment submission is included for tournament entry fees. Set a fee when creating a tournament; players pay using Merchant Control Number 4078 and submit the ClickPesa transaction reference. An admin must verify the reference in the ClickPesa dashboard before the player is registered. Run `supabase/payments-clickpesa.sql` once in Supabase SQL Editor. This is manual verification, not an automatic ClickPesa API checkout/webhook; API access for the Kem merchant account was previously blocked pending KYC. Do not mark a payment paid unless it is confirmed in ClickPesa.
+- Text chat and APK packaging are not included yet.
 - Do not commit secret keys. If a service-role/secret key was previously shared, rotate it in Supabase.
 
 ## Android
