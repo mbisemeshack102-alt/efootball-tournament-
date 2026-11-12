@@ -195,3 +195,24 @@ create policy "Admins delete tournament results" on public.tournament_results
  for delete to authenticated using (
   exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin')
  );
+
+
+-- Enable Supabase Realtime events used by in-app notifications.
+-- Safe to run repeatedly; skips tables already present in the publication.
+do $$
+begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime') then
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'tournaments'
+    ) then
+      alter publication supabase_realtime add table public.tournaments;
+    end if;
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'tournament_results'
+    ) then
+      alter publication supabase_realtime add table public.tournament_results;
+    end if;
+  end if;
+end $$;
