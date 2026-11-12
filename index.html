@@ -65,7 +65,7 @@ try{localStorage.setItem("kwg-language",lang)}catch(e){}
 function message(id,msg,error=false){const el=$(id);el.textContent=msg;el.classList.remove("hidden","error");if(error)el.classList.add("error")}
 function ready(){return db&&SUPABASE_URL.startsWith("https://")&&!SUPABASE_ANON_KEY.startsWith("YOUR_")}
 function setup(){if(!window.supabase){message("authMsg","Imeshindikana kupakia huduma ya login. Angalia intaneti.",true);return}if(!SUPABASE_URL.startsWith("https://")||SUPABASE_ANON_KEY.startsWith("YOUR_")){message("authMsg","Mmiliki wa mfumo: weka Supabase Project URL na Publishable Key ndani ya index.html kabla ya kutumia login.",true);return}db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.getSession().then(({data})=>{if(data.session)loadUser(data.session.user)});db.auth.onAuthStateChange((_event,session)=>{if(session)loadUser(session.user);else showLoggedOut()})}
-function showLoggedOut(){if(notificationChannel&&db){db.removeChannel(notificationChannel);notificationChannel=null;}$("welcome").classList.remove("hidden");$("app").classList.add("hidden");$("bottomNav").classList.add("hidden");$("topActions").innerHTML='<span class="muted">Gaming tournaments • Tanzania</span>';user=null;profile=null}
+function showLoggedOut(){if(voiceChannel||voiceStream)leaveVoice();if(notificationChannel&&db){db.removeChannel(notificationChannel);notificationChannel=null;}$("welcome").classList.remove("hidden");$("app").classList.add("hidden");$("bottomNav").classList.add("hidden");$("topActions").innerHTML='<span class="muted">Gaming tournaments • Tanzania</span>';user=null;profile=null}
 
 let notificationChannel=null;
 function updateNotificationStatus(){
@@ -241,6 +241,7 @@ $("voiceJoin").onclick=async()=>{
 };
 $("voiceMute").onclick=()=>{if(!voiceStream)return;voiceMuted=!voiceMuted;voiceStream.getAudioTracks().forEach(t=>t.enabled=!voiceMuted);$("voiceMute").textContent=voiceMuted?"Unmute":"Mute";vstatus(voiceMuted?"Microphone muted.":"Microphone on.")};
 $("voiceLeave").onclick=leaveVoice;
+window.addEventListener("beforeunload",()=>{if(voiceStream)voiceStream.getTracks().forEach(track=>track.stop());Object.values(voicePeers).forEach(pc=>pc.close())});
 
 setInterval(()=>{const e=$("clock");if(e)e.textContent=new Intl.DateTimeFormat("sw-TZ",{timeZone:"Africa/Dar_es_Salaam",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date())},1000);
 const langSelect=$("languageSelect");if(langSelect){const saved=(()=>{try{return localStorage.getItem("kwg-language")}catch(e){return null}})()||"sw";langSelect.value=saved;applyLanguage(saved);langSelect.addEventListener("change",()=>applyLanguage(langSelect.value))}setup();
