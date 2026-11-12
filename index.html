@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="sw">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827"><link rel="manifest" href="./manifest.webmanifest"><title>KICKOFF WINS GIFTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121d2e;--line:#26364d;--text:#f5f7fb;--muted:#9aabc2;--green:#b7f34a;--blue:#68b8ff;--red:#ff7777}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#1a3150 0,transparent 34%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;background:var(--green);color:#101827;font-weight:800}button.secondary{background:#26364d;color:white}button.danger{background:#542d39;color:#ffdce2}.wrap{max-width:1100px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-weight:900;letter-spacing:.5px;font-size:20px}.brand span{color:var(--green)}.muted{color:var(--muted)}.panel{background:linear-gradient(145deg,#172438,#111b2b);border:1px solid var(--line);border-radius:18px;padding:20px;margin:18px 0}.hero{padding:28px 0}.hero h1{font-size:clamp(30px,6vw,54px);line-height:1.03;margin:10px 0}.hero h1 span{color:var(--green)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.field{display:grid;gap:7px;margin:12px 0}.field input,.field select{background:#0b1422;border:1px solid var(--line);border-radius:11px;padding:13px;color:white;width:100%}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{background:#26364d;color:white}.tabs button.active{background:var(--green);color:#101827}.stat{font-size:28px;font-weight:900;color:var(--green)}.hidden{display:none!important}.item{padding:13px;border:1px solid var(--line);border-radius:12px;margin:9px 0;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.tag{font-size:12px;color:var(--green);background:#263b27;padding:5px 9px;border-radius:20px}.notice{padding:12px;border-radius:10px;background:#20334a;color:#dcecff;margin:10px 0}.error{background:#482b34;color:#ffdce2}.small{font-size:12px}.footer{text-align:center;color:var(--muted);padding:25px}
+</style>
+</head>
+<body><div class="wrap">
+<header class="top"><div class="brand">⚽ KICKOFF <span>WINS GIFTS</span></div><div class="topActions"><label class="small muted" for="languageSelect">Language / Lugha</label> <select id="languageSelect" aria-label="Change language" style="background:#0b1422;color:white;border:1px solid var(--line);border-radius:10px;padding:9px"><option value="sw">Kiswahili</option><option value="en">English</option></select><span id="topActions"><span class="muted">Gaming tournaments • Tanzania</span></span></div></header>
+<section id="welcome" class="hero"><p class="tag" data-i18n="TOURNAMENT HUB">TOURNAMENT HUB</p><h1><span data-i18n="Play. Compete.">Play. Compete.</span><br><span data-i18n="Win together.">Win together.</span></h1><p class="muted" data-i18n="Mashindano ya Free Fire, PUBG Mobile, Call of Duty na michezo mingine.">Mashindano ya Free Fire, PUBG Mobile, Call of Duty na michezo mingine.</p>
+<div class="panel"><h2 data-i18n="Ingia au jisajili">Ingia au jisajili</h2><div class="grid"><div><div class="field"><label>Email</label><input id="email" type="email" placeholder="jina@email.com" autocomplete="email" data-i18n-placeholder="jina@email.com"></div><div class="field"><label data-i18n="Nenosiri">Nenosiri</label><input id="password" type="password" placeholder="Angalau herufi 6" autocomplete="current-password" data-i18n-placeholder="Angalau herufi 6"></div><div class="tabs"><button id="loginBtn" data-i18n="Ingia">Ingia</button><button class="secondary" id="registerBtn" data-i18n="Jisajili">Jisajili</button></div></div><div><h3 data-i18n="Karibu kwenye mashindano">Karibu kwenye mashindano</h3><p class="muted" data-i18n="Akaunti mpya itahitaji kuthibitisha email. Admin dashboard inaonekana kwa akaunti yenye ruhusa ya admin pekee.">Akaunti mpya itahitaji kuthibitisha email. Admin dashboard inaonekana kwa akaunti yenye ruhusa ya admin pekee.</p></div></div><div class="field"><label data-i18n="Verification code">Namba ya uthibitisho wa email</label><input id="verifyEmail" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Ingiza code ya tarakimu 6" data-i18n-placeholder="Ingiza code ya tarakimu 6"></div><div class="tabs"><button id="verifyBtn" class="secondary" data-i18n="Thibitisha code">Thibitisha code</button><button id="resendCodeBtn" class="secondary" data-i18n="Tuma code tena">Tuma code tena</button></div><div id="authMsg" class="notice hidden"></div></div>
+</section>
+<section id="app" class="hidden"><div class="top"><div><p class="muted small">DASHBOARD</p><h2 id="hello">Karibu</h2><span id="roleTag" class="tag">PLAYER</span></div><button class="secondary" id="logoutBtn" data-i18n="Toka">Toka</button></div>
+<div class="tabs panel"><button class="active" data-tab="overview" data-i18n="Muhtasari">Muhtasari</button><button data-tab="tournaments" data-i18n="Mashindano">Mashindano</button><button data-tab="players" id="playersTab" data-i18n="Wachezaji">Wachezaji</button><button data-tab="gifts" data-i18n="Zawadi">Zawadi</button><button data-tab="voicechat">Voice Chat</button><button data-tab="admin" id="adminTab" class="hidden">Admin</button><button data-tab="settings" data-i18n="Settings">Settings</button></div>
+<div id="overview" class="tabView"><div class="grid"><div class="panel"><div class="muted">Mashindano</div><div class="stat" id="tCount">0</div></div><div class="panel"><div class="muted">Wachezaji</div><div class="stat" id="pCount">0</div></div><div class="panel"><div class="muted">Akaunti</div><div class="stat">✓</div><div class="muted small">Umeingia salama</div></div></div><div class="panel"><h3 data-i18n="Habari za mfumo">Habari za mfumo</h3><p class="muted" data-i18n="Chagua Mashindano kujiunga, au fungua Wachezaji kuona washiriki waliosajiliwa.">Chagua Mashindano kujiunga, au fungua Wachezaji kuona washiriki waliosajiliwa.</p></div></div>
+<div id="tournaments" class="tabView hidden"><div class="panel"><h3>Mashindano ya Online</h3><p class="muted small">Jiunge na mashindano ya mtandaoni kwa kutumia code ya mashindano.</p><div class="grid"><div class="field"><label>Code ya mashindano</label><input id="joinTournamentCode" placeholder="KWG-XXXXXXXX" autocapitalize="characters"></div><div class="field"><label>&nbsp;</label><button id="joinByCode">Jiunge kwa code</button></div></div><div id="joinCodeMsg" class="notice hidden"></div></div><div class="panel"><h3 data-i18n="Mashindano yanayopatikana">Mashindano yanayopatikana</h3><div id="tournamentList" class="muted">Inapakia...</div></div><div class="panel"><h3>💳 Malipo ya mashindano — ClickPesa</h3><p class="muted small">Lipa kupitia ClickPesa BillPay. Control Number: <b>4078</b>. Baada ya kulipa, weka transaction reference hapa; admin atathibitisha malipo.</p><div class="grid"><div class="field"><label>Chagua mashindano</label><select id="paymentTournament"></select></div><div class="field"><label>Kiasi cha kulipa (TZS)</label><input id="paymentAmount" readonly value="Chagua mashindano"></div></div><div class="field"><label>ClickPesa transaction reference</label><input id="paymentReference" placeholder="Weka namba ya muamala"></div><button id="submitPayment">Nimelipa — tuma uthibitisho</button><div id="paymentMsg" class="notice hidden"></div><h4>Hali ya malipo yangu</h4><div id="myPayments">Inapakia...</div></div><div class="panel"><h3>🏆 Matokeo na msimamo wa moja kwa moja</h3><div class="field"><label>Chagua mashindano</label><select id="resultsTournament"></select></div><h4>Matokeo</h4><div id="resultsList">Chagua mashindano.</div><h4>Jedwali la msimamo</h4><div id="standingsList">Hakuna matokeo bado.</div></div></div>
+<div id="players" class="tabView hidden"><div class="panel"><h3 data-i18n="Orodha ya wachezaji">Orodha ya wachezaji</h3><p class="muted small" data-i18n="Taarifa za email hazionyeshwi kwa wachezaji wengine.">Taarifa za email hazionyeshwi kwa wachezaji wengine.</p><div id="playerList">Inapakia...</div></div></div>
+<div id="admin" class="tabView hidden"><div class="panel"><h3 data-i18n="Admin Dashboard">Admin Dashboard</h3><p class="muted" data-i18n="Usimamizi wa mashindano na wachezaji. Akaunti yako lazima iwe na role = admin kwenye Supabase.">Usimamizi wa mashindano na wachezaji. Akaunti yako lazima iwe na role = admin kwenye Supabase.</p><div class="grid"><div class="field"><label data-i18n="Jina la mashindano">Jina la mashindano</label><input id="newTitle" placeholder="Mfano: Free Fire Weekend Cup" data-i18n-placeholder="Mfano: Free Fire Weekend Cup"></div><div class="field"><label data-i18n="Mchezo">Mchezo</label><select id="newGame"><option>Free Fire</option><option>PUBG Mobile</option><option>Call of Duty Mobile</option><option>eFootball</option><option>Mwingine</option></select></div><div class="field"><label>Kiingilio (TZS) — 0 = bure</label><input id="newEntryFee" type="number" min="0" step="100" value="0"></div></div><button id="createTournament" data-i18n="+ Tengeneza mashindano">+ Tengeneza mashindano</button><div id="adminMsg" class="notice hidden"></div></div><div class="panel"><h3>💳 Uthibitishaji wa malipo ya ClickPesa</h3><p class="muted small">Kagua muamala kwenye ClickPesa dashboard kabla ya kubonyeza Confirm paid.</p><div id="adminPayments">Inapakia...</div></div><div class="panel"><h3>📣 Tuma notification kwa wachezaji</h3><div class="field"><label>Kichwa cha ujumbe</label><input id="pushTitle" maxlength="80" placeholder="Mfano: Mashindano mapya"></div><div class="field"><label>Ujumbe</label><textarea id="pushBody" rows="3" maxlength="240" style="width:100%;background:#0b1422;color:white;border:1px solid var(--line);border-radius:11px;padding:13px" placeholder="Andika taarifa kwa wachezaji..."></textarea></div><button id="sendPushNotification">Tuma notification</button><p id="adminPushStatus" class="notice hidden"></p></div><div class="panel"><h3 data-i18n="Usimamizi wa washiriki">Usimamizi wa washiriki</h3><div id="adminPlayers">Inapakia...</div></div><div class="panel"><h3>📊 Matokeo na algorithm ya moja kwa moja</h3><p class="muted small">Bandika kila mechi kwenye mstari wake kwa muundo: Timu A,2,1,Timu B. Algorithm itahesabu pointi, magoli na nafasi kiotomatiki.</p><div class="field"><label>Bandika matokeo (mstari mmoja kwa kila mechi)</label><textarea id="resultsPaste" rows="5" style="width:100%;background:#0b1422;color:white;border:1px solid var(--line);border-radius:11px;padding:13px" placeholder="Simba,2,1,Yanga&#10;Azam,0,0,Young Africans"></textarea></div><button id="savePastedResults">Hifadhi matokeo</button><div id="resultsMsg" class="notice hidden"></div></div></div>
+<div id="gifts" class="tabView hidden"><div class="panel"><h3 data-i18n="🎁 Gift Dashboard">🎁 Gift Dashboard</h3><p class="muted" data-i18n="Zawadi zinazopatikana na hali ya maombi yako.">Zawadi zinazopatikana na hali ya maombi yako.</p><div id="giftList">Inapakia zawadi...</div></div><div id="giftAdminPanel" class="panel hidden"><h3 data-i18n="Ongeza zawadi">Ongeza zawadi</h3><div class="grid"><div class="field"><label data-i18n="Jina la zawadi">Jina la zawadi</label><input id="giftName" placeholder="Mfano: 1000 diamonds" data-i18n-placeholder="Mfano: 1000 diamonds"></div><div class="field"><label data-i18n="Maelezo / thamani">Maelezo / thamani</label><input id="giftValue" placeholder="1000 diamonds" data-i18n-placeholder="1000 diamonds"></div></div><button id="addGift" data-i18n="Hifadhi zawadi">Hifadhi zawadi</button><div id="giftAdminMsg" class="notice hidden"></div></div></div>
+<div id="voicechat" class="tabView hidden"><div class="panel"><h3 data-i18n="🎙️ Voice Chat — PUBG-style">🎙️ Voice Chat — PUBG-style</h3><p class="muted" data-i18n="Chagua mchezo na chumba, kisha jiunge kuzungumza live na wachezaji wengine.">Chagua mchezo na chumba, kisha jiunge kuzungumza live na wachezaji wengine.</p><div class="grid"><div class="field"><label>Mchezo</label><select id="voiceGame"><option>Free Fire</option><option>PUBG Mobile</option><option>Call of Duty Mobile</option><option>eFootball</option></select></div><div class="field"><label data-i18n="Chumba">Chumba</label><select id="voiceRoom"><option value="lobby">Lobby</option><option value="team-1">Team 1</option><option value="team-2">Team 2</option></select></div></div><div class="tabs"><button id="voiceJoin" data-i18n="Join voice chat">Join voice chat</button><button id="voiceMute" class="secondary" disabled data-i18n="Mute">Mute</button><button id="voiceLeave" class="danger" disabled data-i18n="Leave">Leave</button></div><p id="voiceChatStatus" class="notice">Hujaingia kwenye voice chat.</p><b data-i18n="Waliopo kwenye chumba">Waliopo kwenye chumba</b><div id="voiceParticipants" class="muted">—</div><div id="remoteAudios"></div><p class="small muted" data-i18n="Tumia headphones kupunguza echo. Voice chat inahitaji HTTPS na ruhusa ya microphone.">Tumia headphones kupunguza echo. Voice chat inahitaji HTTPS na ruhusa ya microphone.</p></div></div>
+<div id="scheduleList" class="panel"><h3>📅 Ratiba ya mashindano</h3><div id="scheduleItems" class="muted">Inapakia ratiba...</div></div>
+<div id="settings" class="tabView hidden"><div class="panel"><h3 data-i18n="Settings">Settings</h3><p><span data-i18n="Saa Tanzania:">Saa Tanzania:</span> <b id="clock">--:--:--</b></p><input id="newPassword" type="password" placeholder="Nenosiri jipya" data-i18n-placeholder="Nenosiri jipya"><button id="passwordBtn" data-i18n="Badili nenosiri">Badili nenosiri</button><div id="settingsMsg" class="notice hidden"></div></div><div id="tournamentAdminSettings" class="hidden"><div class="panel"><h3>⚙️ Algorithm ya mashindano</h3><p class="muted small">Chagua mfumo wa mashindano na pointi. Mfumo wa pointi: ushindi, sare na kushindwa.</p><div class="field"><label>Mashindano</label><select id="algorithmTournament"></select></div><div class="field"><label>Format</label><select id="tournamentFormat"><option value="round_robin">Round Robin (kila timu kucheza na nyingine)</option><option value="knockout">Knockout (mshindwa anatolewa)</option><option value="league">League / Points Table</option></select></div><div class="grid"><div class="field"><label>Pointi za ushindi</label><input id="pointsWin" type="number" min="0" max="10" value="3"></div><div class="field"><label>Pointi za sare</label><input id="pointsDraw" type="number" min="0" max="10" value="1"></div><div class="field"><label>Pointi za kushindwa</label><input id="pointsLoss" type="number" min="0" max="10" value="0"></div></div><button id="saveAlgorithm">Hifadhi algorithm</button><div id="algorithmMsg" class="notice hidden"></div><p class="small muted">Kanuni ya kupanga: pointi nyingi kwanza; zikilingana, tofauti ya magoli, magoli yaliyofungwa, kisha idadi ya ushindi.</p></div>
+<div class="panel"><h3>🗓️ Tengeneza timetable / ratiba</h3><div class="field"><label>Mashindano</label><select id="scheduleTournament"></select></div><div class="grid"><div class="field"><label>Jina la mechi / tukio</label><input id="scheduleTitle" placeholder="Mfano: Semi-final"></div><div class="field"><label>Tarehe na saa (Tanzania)</label><input id="scheduleDate" type="datetime-local"></div></div><div class="field"><label>Raundi / maelezo</label><input id="scheduleDetails" placeholder="Mfano: Round 1 • Uwanja A"></div><button id="saveSchedule">Ongeza kwenye ratiba</button><div id="scheduleMsg" class="notice hidden"></div></div>
+</div><div class="panel"><h3>🔔 Notification za simu</h3><p class="muted small">Washa notification ili upokee taarifa za mashindano hata ukiwa nje ya app.</p><div class="tabs"><button id="enableNotifications">Washa notification</button><button id="disableNotifications" class="secondary">Zima notification</button></div><p id="notificationStatus" class="notice">Notification haijawashwa.</p></div><div class="panel"><h3 data-i18n="Audio input/output">Audio input/output</h3><button id="voiceInput" data-i18n="Ingiza sauti">Ingiza sauti</button><button id="voiceOutput" class="secondary" data-i18n="Toa sauti">Toa sauti</button><input id="voiceText" placeholder="Maneno yaliyotambuliwa" data-i18n-placeholder="Maneno yaliyotambuliwa"><p id="audioStatus" class="muted small" data-i18n="Ruhusu microphone.">Ruhusu microphone.</p></div></div></section><nav id="bottomNav" class="tabs panel hidden"><button data-tab="overview">Home</button><button data-tab="tournaments">Mashindano</button><button data-tab="players">Wachezaji</button><button data-tab="gifts">Zawadi</button><button data-tab="voicechat">Voice</button><button data-tab="settings">Settings</button><button id="bottomLogout" class="danger" data-i18n="Logout">Logout</button></nav><div class="footer" data-i18n="footer">© 2026 KICKOFF WINS GIFTS • Play fair, win big.</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://mljecunjrfgicasyhwac.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_wEsKbJU1SvggtGJGPNeVew_uNquBwOI";
+let db=null,user=null,profile=null;
+const $=id=>document.getElementById(id);
+const translations={
+en:{
+"TOURNAMENT HUB":"TOURNAMENT HUB","Play. Compete.":"Play. Compete.","Win together.":"Win together.","Mashindano ya Free Fire, PUBG Mobile, Call of Duty na michezo mingine.":"Tournaments for Free Fire, PUBG Mobile, Call of Duty and other games.",
+"Ingia au jisajili":"Login or Register","Nenosiri":"Password","Ingia":"Login","Jisajili":"Register","Karibu kwenye mashindano":"Welcome to the tournaments","Akaunti mpya itahitaji kuthibitisha email. Admin dashboard inaonekana kwa akaunti yenye ruhusa ya admin pekee.":"New accounts must verify their email. The Admin dashboard is only available to authorized admins.",
+"Muhtasari":"Overview","Mashindano":"Tournaments","Wachezaji":"Players","Zawadi":"Gifts","Admin":"Admin","Settings":"Settings","Home":"Home","Toka":"Logout","Logout":"Logout","DASHBOARD":"DASHBOARD","Karibu":"Welcome","Habari za mfumo":"System updates","Chagua Mashindano kujiunga, au fungua Wachezaji kuona washiriki waliosajiliwa.":"Choose Tournaments to join, or open Players to see registered participants.",
+"Mashindano yanayopatikana":"Available tournaments","Orodha ya wachezaji":"Player list","Taarifa za email hazionyeshwi kwa wachezaji wengine.":"Email addresses are not shown to other players.","Admin Dashboard":"Admin Dashboard","Usimamizi wa mashindano na wachezaji. Akaunti yako lazima iwe na role = admin kwenye Supabase.":"Manage tournaments and players. Your account must have role = admin in Supabase.","Jina la mashindano":"Tournament name","Mchezo":"Game","+ Tengeneza mashindano":"+ Create tournament","Usimamizi wa washiriki":"Participant management","Saa Tanzania:":"Tanzania time:","Badili nenosiri":"Change password","Nenosiri jipya":"New password","Audio input/output":"Audio input/output","Ingiza sauti":"Voice input","Toa sauti":"Voice output","Ruhusu microphone.":"Allow microphone access.","Verification code":"Email verification code","Thibitisha code":"Verify code","Tuma code tena":"Resend code","🎁 Gift Dashboard":"🎁 Gift Dashboard","Zawadi zinazopatikana na hali ya maombi yako.":"Available rewards and the status of your claims.","Ongeza zawadi":"Add a gift","Jina la zawadi":"Gift name","Maelezo / thamani":"Description / value","Hifadhi zawadi":"Save gift","🎙️ Voice Chat — PUBG-style":"🎙️ Voice Chat — PUBG-style","Chagua mchezo na chumba, kisha jiunge kuzungumza live na wachezaji wengine.":"Choose a game and room, then join to talk live with other players.","Chumba":"Room","Join voice chat":"Join voice chat","Mute":"Mute","Leave":"Leave","Waliopo kwenye chumba":"Players in the room","Tumia headphones kupunguza echo. Voice chat inahitaji HTTPS na ruhusa ya microphone.":"Use headphones to reduce echo. Voice chat requires HTTPS and microphone permission.","footer":"© 2026 KICKOFF WINS GIFTS • Play fair, win big.",
+"jina@email.com":"name@email.com","Angalau herufi 6":"At least 6 characters","Ingiza code ya tarakimu 6":"Enter the 6-digit code","Mfano: Free Fire Weekend Cup":"Example: Free Fire Weekend Cup","Maneno yaliyotambuliwa":"Recognized speech","1000 diamonds":"1000 diamonds"
+},
+sw:{}
+};
+
+const GAME_LINKS={
+ "Free Fire":"https://ff.garena.com/",
+ "PUBG Mobile":"https://www.pubgmobile.com/",
+ "Call of Duty Mobile":"https://www.callofduty.com/mobile",
+ "eFootball":"https://www.konami.com/efootball/",
+ "Mwingine":"https://play.google.com/store/games"
+};
+function gameLink(game){return GAME_LINKS[game]||"https://play.google.com/store/games"}
+function openGame(game){const url=gameLink(game);window.open(url,"_blank","noopener,noreferrer")}
+function applyLanguage(lang){
+const dict=translations[lang]||translations.sw;
+document.documentElement.lang=lang;
+document.querySelectorAll("[data-i18n]").forEach(el=>{const key=el.getAttribute("data-i18n");el.textContent=lang==="sw"?key:(dict[key]||key)});
+document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{const key=el.getAttribute("data-i18n-placeholder");el.placeholder=lang==="sw"?key:(dict[key]||key)});
+const placeholders=lang==="en"?{"email":"Email address","password":"At least 6 characters","newTitle":"Example: Free Fire Weekend Cup","newPassword":"New password","voiceText":"Recognized speech"}:{"email":"jina@email.com","password":"Angalau herufi 6","newTitle":"Mfano: Free Fire Weekend Cup","newPassword":"Nenosiri jipya","voiceText":"Maneno yaliyotambuliwa"};
+Object.entries(placeholders).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.placeholder=value});
+document.querySelectorAll("[data-tab]").forEach(b=>{const key=b.dataset.tab;const names=lang==="en"?{overview:"Overview",tournaments:"Tournaments",players:"Players",gifts:"Gifts",voicechat:"Voice Chat",admin:"Admin",settings:"Settings"}:{overview:"Muhtasari",tournaments:"Mashindano",players:"Wachezaji",gifts:"Zawadi",voicechat:"Sauti",admin:"Admin",settings:"Mipangilio"};if(b.dataset.tab!=="")b.textContent=names[key]||b.textContent});
+try{localStorage.setItem("kwg-language",lang)}catch(e){}
+}
+function message(id,msg,error=false){const el=$(id);el.textContent=msg;el.classList.remove("hidden","error");if(error)el.classList.add("error")}
+function ready(){return db&&SUPABASE_URL.startsWith("https://")&&!SUPABASE_ANON_KEY.startsWith("YOUR_")}
+function setup(){if(!window.supabase){message("authMsg","Imeshindikana kupakia huduma ya login. Angalia intaneti.",true);return}if(!SUPABASE_URL.startsWith("https://")||SUPABASE_ANON_KEY.startsWith("YOUR_")){message("authMsg","Mmiliki wa mfumo: weka Supabase Project URL na Publishable Key ndani ya index.html kabla ya kutumia login.",true);return}db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.getSession().then(({data})=>{if(data.session)loadUser(data.session.user)});db.auth.onAuthStateChange((_event,session)=>{if(session)loadUser(session.user);else showLoggedOut()})}
+function showLoggedOut(){if(voiceChannel||voiceStream)leaveVoice();$("welcome").classList.remove("hidden");$("app").classList.add("hidden");$("bottomNav").classList.add("hidden");$("topActions").innerHTML='<span class="muted">Gaming tournaments • Tanzania</span>';user=null;profile=null}
+
+
+
+const VAPID_PUBLIC_KEY="BOC6qKVpLuMLoQer_qYV4i30swy9bGkaa7zv0xjCkU7BHV2Hdn58kUcG8R4PzTCONEaKrHbrIdWovsjZAXkCraQ";
+function vapidBytes(value){const pad="=".repeat((4-value.length%4)%4);const base=(value+pad).replace(/-/g,"+").replace(/_/g,"/");const raw=atob(base);return Uint8Array.from(raw,c=>c.charCodeAt(0))}
+async function pushEndpoint(action,extra={}){
+ const {data:{session}}=await db.auth.getSession();if(!session)throw new Error("Ingia kwanza.");
+ const response=await fetch(SUPABASE_URL+"/functions/v1/push-notifications",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});
+ const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||("HTTP "+response.status));return result;
+}
+async function enablePush(){
+ if(!("serviceWorker" in navigator)||!("PushManager" in window))throw new Error("Simu/browser hii haitumii Web Push. Tumia Chrome na fungua app kwa HTTPS.");
+ if(!("Notification" in window))throw new Error("Notification API haipatikani.");
+ if(VAPID_PUBLIC_KEY.startsWith("SET_"))throw new Error("VAPID public key haijawekwa bado. Inahitaji kuongezwa baada ya kutengeneza VAPID keys.");
+ const permission=await Notification.requestPermission();if(permission!=="granted")throw new Error("Ruhusa ya notification imekataliwa.");
+ const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+ if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:vapidBytes(VAPID_PUBLIC_KEY)});
+ await pushEndpoint("subscribe",{subscription:sub.toJSON()});return "Notification zimewashwa kwenye kifaa hiki.";
+}
+async function disablePush(){
+ const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();
+ if(sub){await pushEndpoint("unsubscribe",{subscription:sub.toJSON()});await sub.unsubscribe()}
+ return "Notification zimezimwa kwenye kifaa hiki.";
+}
+$("enableNotifications")?.addEventListener("click",async()=>{try{$("notificationStatus").textContent=await enablePush();$("notificationStatus").classList.remove("error")}catch(e){$("notificationStatus").textContent=e.message;$("notificationStatus").classList.add("error")}});
+$("disableNotifications")?.addEventListener("click",async()=>{try{$("notificationStatus").textContent=await disablePush();$("notificationStatus").classList.remove("error")}catch(e){$("notificationStatus").textContent=e.message;$("notificationStatus").classList.add("error")}});
+$("sendPushNotification")?.addEventListener("click",async()=>{
+ if(profile?.role!=="admin")return;
+ const title=$("pushTitle").value.trim(),body=$("pushBody").value.trim();
+ if(!title||!body){$("adminPushStatus").textContent="Jaza kichwa na ujumbe.";return}
+ const btn=$("sendPushNotification");btn.disabled=true;
+ try{const result=await pushEndpoint("send",{title,body});$("adminPushStatus").textContent="Imetumwa: "+result.sent+" • Imeshindwa: "+result.failed+" • Waliowasha notification: "+result.total;$("pushBody").value=""}
+ catch(e){$("adminPushStatus").textContent="Imeshindikana: "+e.message}
+ finally{btn.disabled=false;$("adminPushStatus").classList.remove("hidden")}
+});
+async function loadUser(u){user=u;const {data,error}=await db.from("profiles").select("id,display_name,role").eq("id",u.id).single();if(error){message("authMsg","Akaunti imeingia lakini profile haijapatikana. Hakikisha SQL schema imeendeshwa.",true);return}profile=data;$("tournamentAdminSettings").classList.toggle("hidden",data.role!=="admin");$("welcome").classList.add("hidden");$("app").classList.remove("hidden");$("bottomNav").classList.remove("hidden");$("hello").textContent="Karibu, "+(data.display_name||u.email);$("roleTag").textContent=data.role.toUpperCase();$("adminTab").classList.toggle("hidden",data.role!=="admin");$("topActions").textContent="";await refresh()}
+async function refresh(){await Promise.all([loadTournaments(),loadPlayers(),loadGifts(),loadSchedule(),loadPayments()]);await loadAlgorithmOptions();await loadResults()}
+async function loadTournaments(){const {data,error}=await db.from("tournaments").select("id,title,game,status,join_code,entry_fee_tzs,created_at").order("created_at",{ascending:false});if(error){$("tournamentList").textContent="Imeshindikana kupakia mashindano. Hakikisha schema mpya imeendeshwa: "+error.message;return}$("tCount").textContent=data.length;$("tournamentList").innerHTML=data.length?data.map(t=>'<div class="item"><div><b>'+esc(t.title)+'</b><div class="muted small">'+esc(t.game)+' • '+esc(t.status)+' • '+(Number(t.entry_fee_tzs||0)>0?('TZS '+Number(t.entry_fee_tzs).toLocaleString('en-US')):'BURE')+' • ONLINE</div><div class="tag">Code: '+esc(t.join_code||'pending')+'</div></div><div class="tabs"><button class="secondary" data-open-game="'+esc(t.game)+'">Fungua mchezo</button><button data-join="'+t.id+'">Jiunge</button></div></div>').join():"Bado hakuna mashindano.";document.querySelectorAll("[data-join]").forEach(b=>b.onclick=()=>join(b.dataset.join));document.querySelectorAll("[data-open-game]").forEach(b=>b.onclick=()=>openGame(b.dataset.openGame));if(profile.role==="admin"){document.querySelectorAll("#tournamentList .item").forEach(el=>{const b=el.querySelector("[data-join]");if(b){const d=document.createElement("button");d.textContent="Futa";d.className="danger";d.onclick=async()=>{if(confirm("Futa mashindano haya?")){const {error}=await db.from("tournaments").delete().eq("id",b.dataset.join);if(error)alert(error.message);else loadTournaments()}};el.appendChild(d)}})}}
+async function loadAlgorithmOptions(){
+ const {data,error}=await db.from("tournaments").select("id,title,format,points_win,points_draw,points_loss").order("created_at",{ascending:false});
+ if(error)return;
+ ["algorithmTournament","scheduleTournament"].forEach(id=>{const el=$(id);if(!el)return;const old=el.value;el.innerHTML=data.map(t=>'<option value="'+t.id+'">'+esc(t.title)+'</option>').join("");if(data.some(t=>t.id===old))el.value=old});
+ const t=data.find(x=>x.id===$("algorithmTournament")?.value)||data[0];
+ if(t){$("tournamentFormat").value=t.format||"round_robin";$("pointsWin").value=t.points_win??3;$("pointsDraw").value=t.points_draw??1;$("pointsLoss").value=t.points_loss??0}
+}
+$("algorithmTournament")?.addEventListener("change",loadAlgorithmOptions);
+$("saveAlgorithm")?.addEventListener("click",async()=>{
+ if(profile?.role!=="admin")return message("algorithmMsg","Admin pekee anaweza kubadili algorithm.",true);
+ const id=$("algorithmTournament").value;if(!id)return message("algorithmMsg","Tengeneza mashindano kwanza.",true);
+ const values=["pointsWin","pointsDraw","pointsLoss"].map(x=>Number($(x).value));
+ if(values.some(x=>!Number.isInteger(x)||x<0||x>10))return message("algorithmMsg","Pointi ziwe namba kamili kati ya 0 na 10.",true);
+ const {error}=await db.from("tournaments").update({format:$("tournamentFormat").value,points_win:values[0],points_draw:values[1],points_loss:values[2]}).eq("id",id);
+ message("algorithmMsg",error?error.message:"Algorithm imehifadhiwa.",!!error);
+});
+async function loadSchedule(){
+ const {data,error}=await db.from("tournament_schedule").select("id,title,details,starts_at,tournaments(title)").order("starts_at",{ascending:true});
+ if(error){$("scheduleItems").textContent="Ratiba haipatikani: "+error.message;return}
+ $("scheduleItems").innerHTML=data.length?data.map(s=>'<div class="item"><div><b>'+esc(s.title)+'</b><div class="muted small">'+esc(s.tournaments?.title||"Tournament")+' • '+esc(s.details||"")+'</div><div class="small">'+new Intl.DateTimeFormat("sw-TZ",{timeZone:"Africa/Dar_es_Salaam",dateStyle:"medium",timeStyle:"short"}).format(new Date(s.starts_at))+' (EAT)</div></div>'+(profile?.role==="admin"?'<button class="danger" data-schedule-delete="'+s.id+'">Futa</button>':"")+'</div>').join(""):"Hakuna ratiba iliyowekwa bado.";
+ document.querySelectorAll("[data-schedule-delete]").forEach(b=>b.onclick=async()=>{if(!confirm("Una uhakika unataka kufuta ratiba hii?"))return;const {error}=await db.from("tournament_schedule").delete().eq("id",b.dataset.scheduleDelete);if(error)alert(error.message);else loadSchedule()});
+}
+$("saveSchedule")?.addEventListener("click",async()=>{
+ if(profile?.role!=="admin")return message("scheduleMsg","Admin pekee anaweza kuongeza ratiba.",true);
+ const tournament_id=$("scheduleTournament").value,title=$("scheduleTitle").value.trim(),local=$("scheduleDate").value,details=$("scheduleDetails").value.trim();
+ if(!tournament_id||!title||!local)return message("scheduleMsg","Jaza mashindano, jina na tarehe/saa.",true);
+ const starts_at=new Date(local+":00+03:00").toISOString();
+ const {error}=await db.from("tournament_schedule").insert({tournament_id,title,details,starts_at,created_by:user.id});
+ message("scheduleMsg",error?error.message:"Ratiba imehifadhiwa.",!!error);
+ if(!error){$("scheduleTitle").value="";$("scheduleDate").value="";$("scheduleDetails").value="";await loadSchedule()}
+});
+
+$("joinByCode")?.addEventListener("click",async()=>{const code=$("joinTournamentCode").value.trim().toUpperCase();if(!/^KWG-[A-F0-9]{8}$/.test(code))return message("joinCodeMsg","Weka code sahihi ya mashindano.",true);const {data,error}=await db.from("tournaments").select("id").eq("join_code",code).maybeSingle();if(error||!data)return message("joinCodeMsg","Mashindano hayajapatikana kwa code hiyo.",true);await join(data.id);message("joinCodeMsg","Ombi la kujiunga limewasilishwa.")});
+async function loadResults(){
+ const tid=$("resultsTournament")?.value;
+ const {data:tournaments,error:te}=await db.from("tournaments").select("id,title").order("created_at",{ascending:false});
+ if(te)return;
+ const sel=$("resultsTournament");if(sel){const old=sel.value;sel.innerHTML=tournaments.map(t=>'<option value="'+t.id+'">'+esc(t.title)+'</option>').join("");if(tournaments.some(t=>t.id===old))sel.value=old}
+ const id=sel?.value;if(!id){$("resultsList").textContent="Hakuna mashindano.";return}
+ const {data,error}=await db.from("tournament_results").select("id,team_a,score_a,score_b,team_b,created_at").eq("tournament_id",id).order("created_at",{ascending:true});
+ if(error){$("resultsList").textContent="Matokeo hayapatikani: "+error.message;return}
+ $("resultsList").innerHTML=data.length?data.map(r=>'<div class="item"><div><b>'+esc(r.team_a)+' '+r.score_a+' - '+r.score_b+' '+esc(r.team_b)+'</b></div>'+(profile?.role==="admin"?'<button class="danger" data-result-delete="'+r.id+'">Futa</button>':"")+'</div>').join(""):"Hakuna matokeo yaliyowekwa.";
+ document.querySelectorAll("[data-result-delete]").forEach(btn=>btn.onclick=async()=>{if(!confirm("Futa matokeo haya?"))return;const {error}=await db.from("tournament_results").delete().eq("id",btn.dataset.resultDelete);if(error)alert(error.message);else loadResults()});
+ const {data:cfg}=await db.from("tournaments").select("points_win,points_draw,points_loss").eq("id",id).single();
+ const table={};for(const r of data){for(const [name,sc,opp] of [[r.team_a,r.score_a,r.score_b],[r.team_b,r.score_b,r.score_a]]){const x=table[name]||(table[name]={team:name,played:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});x.played++;x.gf+=sc;x.ga+=opp;if(sc>opp){x.w++;x.pts+=cfg?.points_win??3}else if(sc===opp){x.d++;x.pts+=cfg?.points_draw??1}else{x.l++;x.pts+=cfg?.points_loss??0}}}
+ const ranked=Object.values(table).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||b.w-a.w);
+ $("standingsList").innerHTML=ranked.length?'<div class="item"><b>Nafasi • Timu • P • W • D • L • GD • PTS</b></div>'+ranked.map((x,i)=>'<div class="item"><span>'+(i+1)+'. <b>'+esc(x.team)+'</b></span><span>'+x.played+' • '+x.w+' • '+x.d+' • '+x.l+' • '+(x.gf-x.ga)+' • <b>'+x.pts+'</b></span></div>').join(""):"Bado hakuna msimamo.";
+}
+$("resultsTournament")?.addEventListener("change",loadResults);
+$("savePastedResults")?.addEventListener("click",async()=>{
+ if(profile?.role!=="admin")return message("resultsMsg","Admin pekee anaweza kuhifadhi matokeo.",true);
+ const tournament_id=$("resultsTournament").value,raw=$("resultsPaste").value.trim();if(!tournament_id||!raw)return message("resultsMsg","Chagua mashindano na bandika matokeo.",true);
+ const rows=raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean);const parsed=[];
+ for(let i=0;i<rows.length;i++){const p=rows[i].split(",").map(x=>x.trim());if(p.length!==4||!p[0]||!p[3]||!/^\d+$/.test(p[1])||!/^\d+$/.test(p[2]))return message("resultsMsg","Mstari "+(i+1)+" si sahihi. Tumia: Timu A,2,1,Timu B",true);parsed.push({tournament_id,team_a:p[0],score_a:Number(p[1]),score_b:Number(p[2]),team_b:p[3],created_by:user.id})}
+ const {error}=await db.from("tournament_results").insert(parsed);if(error)message("resultsMsg",error.message,true);else{$("resultsPaste").value="";message("resultsMsg",parsed.length+" matokeo yamehifadhiwa. Msimamo umehesabiwa upya.");await loadResults()}
+});
+
+async function join(id){
+ const {data:t,error:te}=await db.from("tournaments").select("entry_fee_tzs").eq("id",id).single();
+ if(te)return alert(te.message);
+ if(Number(t.entry_fee_tzs)>0){
+  const {data:p,error:pe}=await db.from("tournament_payments").select("id,status").eq("tournament_id",id).eq("player_id",user.id).eq("status","paid").maybeSingle();
+  if(pe||!p)return alert("Mashindano haya yanahitaji malipo. Lipa kupitia sehemu ya ClickPesa na subiri uthibitisho wa admin.");
+ }
+ const {error}=await db.from("tournament_registrations").insert({tournament_id:id,player_id:user.id});
+ alert(error?(error.code==="23505"?"Tayari umejiunga.":error.message):"Umejiunga na mashindano!");
+}
+
+async function loadPayments(){
+ const {data:tournaments,error:te}=await db.from("tournaments").select("id,title,entry_fee_tzs").order("created_at",{ascending:false});
+ if(te){$("paymentMsg").textContent="Schema ya malipo haijawekwa bado.";return}
+ const select=$("paymentTournament"),previous=select.value;
+ select.innerHTML='<option value="">Chagua mashindano</option>'+(tournaments||[]).map(t=>'<option value="'+t.id+'" data-fee="'+Number(t.entry_fee_tzs||0)+'">'+esc(t.title)+' — TZS '+Number(t.entry_fee_tzs||0)+'</option>').join("");
+ if(previous)select.value=previous;
+ const updateAmount=()=>{$("paymentAmount").value=select.selectedOptions[0]?.dataset.fee?("TZS "+Number(select.selectedOptions[0].dataset.fee).toLocaleString("en-US")):"Chagua mashindano"};
+ select.onchange=updateAmount;updateAmount();
+ const mine=await db.from("tournament_payments").select("id,tournament_id,amount_tzs,transaction_reference,status,created_at,tournaments(title)").eq("player_id",user.id).order("created_at",{ascending:false});
+ if(mine.error){$("myPayments").textContent=mine.error.message;return}
+ $("myPayments").innerHTML=(mine.data||[]).map(p=>'<div class="item"><div><b>'+esc(p.tournaments?.title||"Mashindano")+'</b><div class="muted small">TZS '+Number(p.amount_tzs).toLocaleString("en-US")+' • Ref: '+esc(p.transaction_reference)+'</div></div><span class="tag">'+esc(p.status.toUpperCase())+'</span></div>').join("")||"Bado hujatuma malipo.";
+ if(profile.role==="admin"){
+  const all=await db.from("tournament_payments").select("id,amount_tzs,transaction_reference,status,created_at,profiles(display_name),tournaments(title)").order("created_at",{ascending:false});
+  if(all.error){$("adminPayments").textContent=all.error.message;return}
+  $("adminPayments").innerHTML=(all.data||[]).map(p=>'<div class="item"><div><b>'+esc(p.profiles?.display_name||"Player")+' • '+esc(p.tournaments?.title||"")+'</b><div class="muted small">TZS '+Number(p.amount_tzs).toLocaleString("en-US")+' • '+esc(p.transaction_reference)+'</div><span class="tag">'+esc(p.status.toUpperCase())+'</span></div>'+(p.status==="pending"?'<div class="tabs"><button data-payment-status="paid" data-payment-id="'+p.id+'">Confirm paid</button><button class="danger" data-payment-status="rejected" data-payment-id="'+p.id+'">Reject</button></div>':"")+'</div>').join("")||"Hakuna malipo yaliyowasilishwa.";
+  document.querySelectorAll("[data-payment-status]").forEach(b=>b.onclick=async()=>{if(!confirm("Umehakiki muamala huu kwenye ClickPesa?"))return;const {error}=await db.from("tournament_payments").update({status:b.dataset.paymentStatus,verified_by:user.id}).eq("id",b.dataset.paymentId);if(error)alert(error.message);else loadPayments()});
+ }
+}
+$("submitPayment").onclick=async()=>{
+ const tournament_id=$("paymentTournament").value,transaction_reference=$("paymentReference").value.trim();
+ if(!tournament_id||!transaction_reference)return message("paymentMsg","Chagua mashindano na weka transaction reference.",true);
+ const {error}=await db.from("tournament_payments").insert({tournament_id,player_id:user.id,transaction_reference});
+ if(error)message("paymentMsg",error.code==="23505"?"Transaction reference hii imeshatumika.":error.message,true);
+ else{$("paymentReference").value="";message("paymentMsg","Uthibitisho umetumwa. Usajili utakamilika baada ya admin kuthibitisha malipo.");await loadPayments()}
+};
+
+async function loadPlayers(){const {data,error}=await db.from("profiles").select("id,display_name,role,created_at").order("created_at",{ascending:false});if(error){$("playerList").textContent="Imeshindikana kupakia wachezaji.";return}$("pCount").textContent=data.length;$("playerList").innerHTML=data.map(p=>'<div class="item"><div><b>'+esc(p.display_name||"Mchezaji")+'</b><div class="muted small">'+esc(p.role)+'</div></div></div>').join("");$("adminPlayers").innerHTML=profile.role==="admin"?data.map(p=>'<div class="item"><div><b>'+esc(p.display_name||"Mchezaji")+'</b><div class="muted small">'+esc(p.role)+'</div></div><span class="tag">'+(p.id===user.id?"WEWE":"AKAUNTI")+'</span></div>').join(""):"Admin pekee."}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("loginBtn").onclick=async()=>{if(!ready())return;const {error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)message("authMsg",error.message,true)}
+$("registerBtn").onclick=async()=>{if(!ready())return;const email=$("email").value.trim(),password=$("password").value;if(!email||password.length<6){message("authMsg","Weka email sahihi na nenosiri la angalau herufi 6.",true);return}const {data,error}=await db.auth.signUp({email,password});if(error)message("authMsg",error.message,true);else message("authMsg",data.session?"Akaunti imetengenezwa na kuthibitishwa.":"Tumetuma code ya uthibitisho kwenye email yako. Ingiza code ya tarakimu 6 hapo juu.")};
+$("verifyBtn").onclick=async()=>{if(!ready())return;const email=$("email").value.trim(),token=$("verifyEmail").value.trim();if(!email||!/^[0-9]{6}$/.test(token))return message("authMsg","Weka email na code sahihi ya tarakimu 6.",true);const {data,error}=await db.auth.verifyOtp({email,token,type:"signup"});if(error)message("authMsg","Code haijathibitishwa: "+error.message,true);else{message("authMsg","Email imethibitishwa. Karibu!");if(data.session)await loadUser(data.user)}};
+$("resendCodeBtn").onclick=async()=>{if(!ready())return;const email=$("email").value.trim();if(!email)return message("authMsg","Weka email kwanza.",true);const {error}=await db.auth.resend({type:"signup",email});message("authMsg",error?"Imeshindikana kutuma code: "+error.message:"Code mpya imetumwa. Angalia inbox na spam.",!!error)}
+$("logoutBtn").onclick=()=>db.auth.signOut();$("bottomLogout").onclick=()=>db.auth.signOut();
+$("createTournament").onclick=async()=>{const title=$("newTitle").value.trim(),entry_fee_tzs=Number($("newEntryFee").value||0);if(!title)return message("adminMsg","Weka jina la mashindano.",true);if(!Number.isSafeInteger(entry_fee_tzs)||entry_fee_tzs<0)return message("adminMsg","Kiasi cha kiingilio si sahihi.",true);const {data,error}=await db.from("tournaments").insert({title,game:$("newGame").value,entry_fee_tzs,created_by:user.id}).select("join_code").single();if(error)message("adminMsg",error.message,true);else{message("adminMsg","Mashindano yametengenezwa. Code: "+data.join_code+" • Kiingilio: TZS "+entry_fee_tzs);$("newTitle").value="";$("newEntryFee").value="0";await loadTournaments();await loadPayments();await loadAlgorithmOptions();await loadResults()}};
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="admin"&&profile.role!=="admin")return;document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".tabView").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab))});
+$("passwordBtn")?.addEventListener("click",async()=>{const p=$("newPassword").value;if(p.length<6)return message("settingsMsg","Nenosiri liwe na herufi 6 au zaidi.",true);const {error}=await db.auth.updateUser({password:p});message("settingsMsg",error?error.message:"Nenosiri limebadilishwa.",!!error)});
+$("voiceInput")?.addEventListener("click",()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("audioStatus").textContent="Tumia microphone ya keyboard ya Android.";return}const rec=new SR();rec.lang="sw-TZ";rec.onresult=e=>$("voiceText").value=e.results[0][0].transcript;rec.onerror=e=>$("audioStatus").textContent=e.error;rec.start()});
+$("voiceOutput")?.addEventListener("click",()=>{if(window.speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance("Karibu KICKOFF WINS GIFTS"));else $("audioStatus").textContent="Audio output haipatikani."});
+
+async function loadGifts(){
+ const {data,error}=await db.from("gifts").select("id,name,description,status").order("created_at",{ascending:false});
+ if(error){$("giftList").textContent="Gift list unavailable: "+error.message;return}
+ $("giftAdminPanel").classList.toggle("hidden",profile.role!=="admin");
+ const claimQuery=profile.role==="admin"?db.from("gift_claims").select("id,gift_id,player_id,status,profiles(display_name)").order("created_at",{ascending:false}):db.from("gift_claims").select("id,gift_id,status").eq("player_id",user.id);
+ const {data:claims,error:claimError}=await claimQuery;if(claimError){$("giftList").textContent="Claims unavailable: "+claimError.message;return}const mine=claims||[];
+ if(profile.role==="admin"){
+  $("giftList").innerHTML=data.map(g=>'<div class="item"><div><b>'+esc(g.name)+'</b><div class="muted small">'+esc(g.description||"")+'</div></div><button class="danger" data-delete-gift="'+g.id+'">Delete gift</button></div>'+mine.filter(c=>c.gift_id===g.id).map(c=>'<div class="item"><div>'+esc(c.profiles?.display_name||"Player")+' • '+esc(c.status)+'</div><button class="secondary" data-deliver="'+c.id+'" '+(c.status==="delivered"?"disabled":"")+'>Mark delivered</button></div>').join("")).join("")||"Hakuna zawadi zilizowekwa bado.";
+ }else{
+  $("giftList").innerHTML=data.map(g=>{const c=mine.find(x=>x.gift_id===g.id);return '<div class="item"><div><b>'+esc(g.name)+'</b><div class="muted small">'+esc(g.description||"")+'</div><span class="tag">'+esc(c?c.status:g.status)+'</span></div><button data-claim="'+g.id+'" '+(c?"disabled":"")+'>'+(c?"Requested":"Claim gift")+'</button></div>'}).join("")||"Hakuna zawadi zilizowekwa bado.";
+ }
+ document.querySelectorAll("[data-claim]").forEach(b=>b.onclick=async()=>{const {error}=await db.from("gift_claims").insert({gift_id:b.dataset.claim,player_id:user.id});if(error)alert(error.message);else loadGifts()});
+ document.querySelectorAll("[data-deliver]").forEach(b=>b.onclick=async()=>{const {error}=await db.from("gift_claims").update({status:"delivered"}).eq("id",b.dataset.deliver);if(error)alert(error.message);else loadGifts()});
+ document.querySelectorAll("[data-delete-gift]").forEach(b=>b.onclick=async()=>{if(profile?.role!=="admin"||!confirm("Futa zawadi hii na maombi yake yote?"))return;const {error}=await db.from("gifts").delete().eq("id",b.dataset.deleteGift);if(error)alert(error.message);else loadGifts()});
+}
+$("addGift").onclick=async()=>{const name=$("giftName").value.trim(),description=$("giftValue").value.trim();if(!name)return message("giftAdminMsg","Weka jina la zawadi.",true);const {error}=await db.from("gifts").insert({name,description,created_by:user.id});if(error)message("giftAdminMsg",error.message,true);else{$("giftName").value="";$("giftValue").value="";message("giftAdminMsg","Zawadi imehifadhiwa.");loadGifts()}};
+let voiceChannel=null,voiceStream=null,voicePeers={},voiceRoomKey="",voiceMuted=false;
+const rtcConfig={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
+function vstatus(t,bad=false){$("voiceChatStatus").textContent=t;$("voiceChatStatus").classList.toggle("error",bad)}
+function dropPeer(id){if(voicePeers[id]){voicePeers[id].close();delete voicePeers[id]}const a=$("audio-"+id);if(a)a.remove()}
+async function peer(id,makeOffer){
+ if(voicePeers[id]||!voiceStream)return;const pc=new RTCPeerConnection(rtcConfig);voicePeers[id]=pc;
+ voiceStream.getTracks().forEach(t=>pc.addTrack(t,voiceStream));
+ pc.onicecandidate=e=>{if(e.candidate)voiceChannel?.send({type:"broadcast",event:"signal",payload:{to:id,from:user.id,room:voiceRoomKey,candidate:e.candidate}})};
+ pc.ontrack=e=>{let a=$("audio-"+id);if(!a){a=document.createElement("audio");a.id="audio-"+id;a.autoplay=true;a.playsInline=true;$("remoteAudios").appendChild(a)}a.srcObject=e.streams[0]};
+ if(makeOffer){const offer=await pc.createOffer();await pc.setLocalDescription(offer);await voiceChannel.send({type:"broadcast",event:"signal",payload:{to:id,from:user.id,room:voiceRoomKey,description:pc.localDescription}})}
+ return pc;
+}
+async function leaveVoice(){
+ if(voiceChannel){try{await voiceChannel.untrack();await db.removeChannel(voiceChannel)}catch(e){}voiceChannel=null}
+ Object.keys(voicePeers).forEach(dropPeer);if(voiceStream){voiceStream.getTracks().forEach(t=>t.stop());voiceStream=null}
+ $("voiceJoin").disabled=false;$("voiceMute").disabled=true;$("voiceLeave").disabled=true;$("voiceMute").textContent="Mute";$("voiceParticipants").textContent="—";voiceMuted=false;vstatus("Umetoka kwenye voice chat.");
+}
+$("voiceJoin").onclick=async()=>{
+ if(!db||!user)return vstatus("Ingia kwanza kwenye akaunti.",true);
+ if(!navigator.mediaDevices?.getUserMedia)return vstatus("Microphone haipatikani. Fungua app kwa HTTPS na browser inayounga mkono audio.",true);
+ try{
+  voiceStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},video:false});
+  voiceRoomKey="kwg-"+$("voiceGame").value.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-"+$("voiceRoom").value;
+  voiceChannel=db.channel(voiceRoomKey,{config:{broadcast:{self:false},presence:{key:user.id}}});
+  voiceChannel.on("broadcast",{event:"signal"},async({payload})=>{if(!payload||payload.to!==user.id||payload.room!==voiceRoomKey)return;try{const pc=voicePeers[payload.from]||await peer(payload.from,false);if(payload.description){await pc.setRemoteDescription(payload.description);if(payload.description.type==="offer"){const ans=await pc.createAnswer();await pc.setLocalDescription(ans);await voiceChannel.send({type:"broadcast",event:"signal",payload:{to:payload.from,from:user.id,room:voiceRoomKey,description:pc.localDescription}})}}if(payload.candidate)await pc.addIceCandidate(payload.candidate)}catch(e){console.warn("Voice signaling failed",e)}});
+  voiceChannel.on("presence",{event:"sync"},async()=>{const ids=Object.keys(voiceChannel.presenceState()).filter(id=>id!==user.id);$("voiceParticipants").textContent=(ids.length+1)+" player(s)";for(const id of ids)if(user.id.localeCompare(id)<0)await peer(id,true)});
+  voiceChannel.on("presence",{event:"join"},async({key})=>{if(key!==user.id&&user.id.localeCompare(key)<0)await peer(key,true)});
+  const st=await voiceChannel.subscribe(async state=>{if(state==="SUBSCRIBED"){await voiceChannel.track({user_id:user.id,name:profile.display_name||"Player"});$("voiceJoin").disabled=true;$("voiceMute").disabled=false;$("voiceLeave").disabled=false;vstatus("Umeingia "+$("voiceGame").value+" / "+$("voiceRoom").value+". Ongea sasa.")}else if(state==="CHANNEL_ERROR"||state==="TIMED_OUT")vstatus("Voice channel connection failed.",true)});
+ }catch(e){if(voiceStream){voiceStream.getTracks().forEach(t=>t.stop());voiceStream=null}vstatus("Voice chat error: "+e.message,true)}
+};
+$("voiceMute").onclick=()=>{if(!voiceStream)return;voiceMuted=!voiceMuted;voiceStream.getAudioTracks().forEach(t=>t.enabled=!voiceMuted);$("voiceMute").textContent=voiceMuted?"Unmute":"Mute";vstatus(voiceMuted?"Microphone muted.":"Microphone on.")};
+$("voiceLeave").onclick=leaveVoice;
+window.addEventListener("beforeunload",()=>{if(voiceStream)voiceStream.getTracks().forEach(track=>track.stop());Object.values(voicePeers).forEach(pc=>pc.close())});
+
+setInterval(()=>{const e=$("clock");if(e)e.textContent=new Intl.DateTimeFormat("sw-TZ",{timeZone:"Africa/Dar_es_Salaam",hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date())},1000);
+const langSelect=$("languageSelect");if(langSelect){const saved=(()=>{try{return localStorage.getItem("kwg-language")}catch(e){return null}})()||"sw";langSelect.value=saved;applyLanguage(saved);langSelect.addEventListener("change",()=>applyLanguage(langSelect.value))}setup();
+if('serviceWorker' in navigator && location.protocol==='https:'){
+ navigator.serviceWorker.register('./sw.js').then(reg=>reg.update()).catch(err=>console.warn('PWA service worker registration failed',err));
+}
+</script></body></html>
