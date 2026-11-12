@@ -40,22 +40,27 @@ Once deployed over HTTPS, open the site in Chrome on Android and use **Add to Ho
 
 
 ## Notifications
-- In-app live alerts are shown for new tournaments and results. Admins also receive alerts for new tournament registrations and gift claims; players receive an alert when their gift claim is marked delivered. The user must allow browser notifications, and the app must be open for these live Realtime alerts.
-- In Supabase, open **Database → Publications → supabase_realtime** and enable the tables `tournaments`, `tournament_results`, `tournament_registrations`, and `gift_claims`. Save the changes. Without this, the live event alerts will not arrive.
 
-## Background push notifications (when the app is closed)
-This feature needs Web Push keys and one-time Supabase setup; it is not active merely by deploying the static site.
+### Player notifications
+- The app now includes **Washa notification / Zima notification** controls in Settings.
+- Players must sign in, open the app over HTTPS in Chrome on Android, enable notifications, and accept the Android permission prompt on each device.
+- Admins can send a notification to all subscribed devices from **Admin → Tuma notification kwa wachezaji**.
 
-1. Generate a VAPID key pair using `npx web-push generate-vapid-keys`. Keep the **private** key secret.
-2. In Supabase Edge Function secrets, set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (for example `mailto:your-admin-email@example.com`), and `KWG_WEBHOOK_SECRET` (a long random secret).
-3. Put the same **public** VAPID key in `PUSH_VAPID_PUBLIC_KEY` in `index.html`. Never put the private key or Supabase service-role key in browser code.
-4. Deploy the Edge Function: `supabase functions deploy push-notifications`.
-5. Configure two Supabase Database Webhooks (POST) targeting `https://YOUR_PROJECT_REF.supabase.co/functions/v1/push-notifications`: one for INSERT on `public.tournaments`, and one for INSERT on `public.tournament_results`. Add header `x-kwg-webhook-secret: YOUR_KWG_WEBHOOK_SECRET` to both.
-6. Deploy the site over HTTPS. Each player opens Settings and taps **Enable background push** on each device, then accepts the browser permission prompt. The current Edge Function/webhook example covers tournament and result inserts; add separate webhooks for registration inserts and gift-claim inserts/updates if those events must also push while the app is closed.
+### Background push (works when the app is closed)
+1. Run `supabase/push-notifications.sql` once in Supabase SQL Editor. This creates the private `push_subscriptions` table.
+2. In Supabase **Edge Functions → Secrets**, set:
+   - `VAPID_PUBLIC_KEY` to the public key below.
+   - `VAPID_PRIVATE_KEY` to the private key generated for this project (never put it in GitHub or browser code).
+   - `VAPID_SUBJECT` to a contact such as `mailto:YOUR_ADMIN_EMAIL`.
+   - `KWG_WEBHOOK_SECRET` to a long random secret if database webhooks will be used.
+   - Ensure the standard `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` function secrets are present.
+3. The public VAPID key is already configured in `index.html`. Do not change it unless you generate a matching new key pair.
+4. Deploy the updated Edge Function code from `supabase/functions/push-notifications/index.ts` using Supabase **Edge Functions → push-notifications → Deploy** (or the Supabase CLI).
+5. Deploy the GitHub Pages site over HTTPS. Each player signs in and enables notifications in Settings.
+6. Optional automatic alerts for new tournament/result database rows require Supabase Database Webhooks (POST) to the function URL with header `x-kwg-webhook-secret` set to the same `KWG_WEBHOOK_SECRET`. Configure one INSERT webhook for `public.tournaments` and one for `public.tournament_results`.
 
-Push notifications can arrive while the app is closed, subject to Android/browser notification and battery settings. Real-device testing is still required.
-
-
+The Admin broadcast action is protected by a server-side check of the user's `profiles.role = 'admin'`. The Edge Function uses the service-role key only on the server. Test on real Android devices; browser permission, HTTPS, battery restrictions, and device settings affect delivery.
+ 
 ## Required live checks before public launch
 - Run the complete `supabase/schema.sql` in the Supabase SQL Editor; the browser app cannot create these tables automatically.
 - Confirm a new email can receive and verify the six-digit OTP, then test login and logout.
