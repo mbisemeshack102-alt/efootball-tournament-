@@ -38,6 +38,10 @@ Gaming tournament web app for Free Fire, PUBG Mobile, Call of Duty Mobile, eFoot
 Once deployed over HTTPS, open the site in Chrome on Android and use **Add to Home screen**. The service worker is registered automatically on HTTPS for the installable PWA shell. A signed production APK requires a separate Android packaging/build and signing step; this repository does not yet contain a signed APK.
 
 
+## Notifications
+- In-app live alerts are shown for new tournaments and results. Admins also receive alerts for new tournament registrations and gift claims; players receive an alert when their gift claim is marked delivered. The user must allow browser notifications, and the app must be open for these live Realtime alerts.
+- In Supabase, open **Database → Publications → supabase_realtime** and enable the tables `tournaments`, `tournament_results`, `tournament_registrations`, and `gift_claims`. Save the changes. Without this, the live event alerts will not arrive.
+
 ## Background push notifications (when the app is closed)
 This feature needs Web Push keys and one-time Supabase setup; it is not active merely by deploying the static site.
 
@@ -46,7 +50,7 @@ This feature needs Web Push keys and one-time Supabase setup; it is not active m
 3. Put the same **public** VAPID key in `PUSH_VAPID_PUBLIC_KEY` in `index.html`. Never put the private key or Supabase service-role key in browser code.
 4. Deploy the Edge Function: `supabase functions deploy push-notifications`.
 5. Configure two Supabase Database Webhooks (POST) targeting `https://YOUR_PROJECT_REF.supabase.co/functions/v1/push-notifications`: one for INSERT on `public.tournaments`, and one for INSERT on `public.tournament_results`. Add header `x-kwg-webhook-secret: YOUR_KWG_WEBHOOK_SECRET` to both.
-6. Deploy the site over HTTPS. Each player opens Settings and taps **Enable background push** on each device, then accepts the browser permission prompt.
+6. Deploy the site over HTTPS. Each player opens Settings and taps **Enable background push** on each device, then accepts the browser permission prompt. The current Edge Function/webhook example covers tournament and result inserts; add separate webhooks for registration inserts and gift-claim inserts/updates if those events must also push while the app is closed.
 
 Push notifications can arrive while the app is closed, subject to Android/browser notification and battery settings. Real-device testing is still required.
 
