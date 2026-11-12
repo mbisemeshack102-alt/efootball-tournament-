@@ -81,3 +81,39 @@ for delete to authenticated using (
 -- After creating your own account, promote it by replacing EMAIL below:
 -- update public.profiles p set role = 'admin'
 -- from auth.users u where p.id = u.id and u.email = 'YOUR_ADMIN_EMAIL';
+
+
+-- Gift dashboard schema and row-level security
+create table if not exists public.gifts (
+ id uuid primary key default gen_random_uuid(),
+ name text not null,
+ description text not null default '',
+ status text not null default 'available' check (status in ('available','paused')),
+ created_by uuid not null references public.profiles(id),
+ created_at timestamptz not null default now()
+);
+create table if not exists public.gift_claims (
+ id uuid primary key default gen_random_uuid(),
+ gift_id uuid not null references public.gifts(id) on delete cascade,
+ player_id uuid not null references public.profiles(id) on delete cascade,
+ status text not null default 'pending' check (status in ('pending','delivered')),
+ created_at timestamptz not null default now(),
+ unique(gift_id, player_id)
+);
+alter table public.gifts enable row level security;
+alter table public.gift_claims enable row level security;
+drop policy if exists "Authenticated users view gifts" on public.gifts;
+create policy "Authenticated users view gifts" on public.gifts for select to authenticated using (true);
+drop policy if exists "Admins manage gifts" on public.gifts;
+create policy "Admins manage gifts" on public.gifts for all to authenticated
+using (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'))
+with check (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'));
+drop policy if exists "Players view gift claims" on public.gift_claims;
+create policy "Players view gift claims" on public.gift_claims for select to authenticated
+using (player_id=auth.uid() or exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'));
+drop policy if exists "Players claim gifts" on public.gift_claims;
+create policy "Players claim gifts" on public.gift_claims for insert to authenticated with check (player_id=auth.uid());
+drop policy if exists "Admins update gift claims" on public.gift_claims;
+create policy "Admins update gift claims" on public.gift_claims for update to authenticated
+using (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'))
+with check (exists(select 1 from public.profiles p where p.id=auth.uid() and p.role='admin'));
