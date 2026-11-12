@@ -1,0 +1,53 @@
+name: Build KICKOFF WINS GIFTS Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kickoff-wins-gifts-foundation
+    paths:
+      - "index.html"
+      - "manifest.webmanifest"
+      - "icon.svg"
+      - "package.json"
+      - "capacitor.config.json"
+      - ".github/workflows/build-android-apk.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install Capacitor
+        run: npm install
+      - name: Prepare web app
+        run: npm run build:web
+      - name: Create Android project
+        run: npx cap add android
+      - name: Sync Android project
+        run: npx cap sync android
+      - name: Build installable debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: KICKOFF-WINS-GIFTS-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
