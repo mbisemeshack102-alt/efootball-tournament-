@@ -17,7 +17,7 @@ Gaming tournament web app for Free Fire, PUBG Mobile, Call of Duty Mobile, eFoot
 2. In Supabase SQL Editor, run all SQL from `supabase/schema.sql` (including the gift dashboard tables and RLS policies).
 3. The current branch already has the project's Supabase URL and publishable key configured. If the project is ever changed, update these values in `index.html` using the **publishable** key only. Never put a Supabase secret/service-role key in browser code or GitHub.
 4. In Supabase **Authentication → URL Configuration**, set the deployed site URL and add it to the allowed redirect URLs. Enable email confirmations.
-5. For six-digit signup verification, open **Authentication → Email Templates → Confirm signup** and include `{{ .Token }}` in the message body. For passwordless email-code login, open **Authentication → Email Templates → Magic Link** and include `{{ .Token }}`. The app verifies signup codes with `type: "signup"` and login codes with `type: "email"`.
+5. For six-digit signup verification, enable **Authentication → Providers → Email → Confirm email**. In **Authentication → Email Templates → Confirm signup**, include `{{ .Token }}` in the message body. For passwordless email-code login, open **Authentication → Email Templates → Magic Link** and include `{{ .Token }}` (not only `{{ .ConfirmationURL }}`). Keep the OTP length at 6 digits. The app verifies signup codes with `type: "signup"` and login codes with `type: "email"`. The app blocks access for users whose email is not confirmed.
 6. Configure a **custom SMTP provider** under **Authentication → Settings → SMTP** (for example Resend, Brevo, Postmark, or SendGrid). The built-in Supabase mailer is restricted to project-team addresses and very low send limits; it is not suitable for public users. Never commit SMTP credentials to GitHub.
 7. For password recovery, keep **Authentication → Email Templates → Reset Password** with a working `{{ .ConfirmationURL }}` link. Set the Supabase Site URL and allowed redirect list to the deployed app URL: `https://mbisemeshack102-alt.github.io/efootball-tournament-/`.
 8. To enable Google sign-in, open **Authentication → Sign In / Providers → Google** and enable it with a Google OAuth Client ID and Client Secret created in Google Cloud Console. Add this exact authorized redirect URI in Google Cloud: `https://mljecunjrfgicasyhwac.supabase.co/auth/v1/callback`. Also ensure the app URL above is in Supabase's allowed redirect URLs. Google sign-in will not work until these credentials are supplied in the Supabase dashboard.
@@ -44,10 +44,10 @@ Once deployed over HTTPS, open the site in Chrome on Android and use **Add to Ho
 
 
 ## Required live checks before public launch
-- Push notifications were removed from the app, service worker, database setup, and Edge Function source. The service worker remains only for the offline app shell.
+- Push notifications have been removed from the app and repository. The service worker remains only for the offline app shell.
 - Run the complete `supabase/schema.sql` in the Supabase SQL Editor; the browser app cannot create these tables automatically.
 - Confirm a new email can receive and verify the six-digit OTP, then test login and logout.
 - Promote the intended owner account to `admin` with the SQL above; do not expose service-role credentials.
 - Test tournament creation/joining, results, gifts and gift claims with separate admin and player accounts.
 - Test voice chat with at least two phones/accounts on different networks. The current WebRTC setup uses public STUN only; a TURN relay is recommended for reliable mobile-network connectivity.
-- Background push notifications remain optional and require VAPID keys plus the documented Edge Function and database webhooks.
+- OTP delivery depends on Supabase Email confirmations, six-digit token templates, and a working custom SMTP provider. These dashboard settings must be completed and tested; they cannot be enabled by a GitHub code change alone.
