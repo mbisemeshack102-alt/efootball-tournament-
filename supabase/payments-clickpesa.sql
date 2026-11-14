@@ -64,7 +64,7 @@ for each row execute function public.kwg_set_payment_amount();
 
 create or replace function public.kwg_register_paid_player()
 returns trigger language plpgsql security definer set search_path = public
-as $$
+as $
 begin
   if new.status = 'paid' and old.status is distinct from 'paid' then
     insert into public.tournament_registrations(tournament_id, player_id)
