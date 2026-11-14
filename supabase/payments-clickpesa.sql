@@ -19,6 +19,11 @@ create table if not exists public.tournament_payments (
 
 alter table public.tournament_payments enable row level security;
 
+create index if not exists tournament_payments_player_tournament_idx
+  on public.tournament_payments(player_id, tournament_id);
+create index if not exists tournament_payments_status_idx
+  on public.tournament_payments(status);
+
 drop policy if exists "Players submit own payments" on public.tournament_payments;
 create policy "Players submit own payments" on public.tournament_payments
   for insert to authenticated with check (
