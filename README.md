@@ -22,7 +22,6 @@ Gaming tournament web app for Free Fire, PUBG Mobile, Call of Duty Mobile, eFoot
 7. For password recovery, keep **Authentication → Email Templates → Reset Password** with a working `{{ .ConfirmationURL }}` link. Set the Supabase Site URL and allowed redirect list to the deployed app URL: `https://mbisemeshack102-alt.github.io/efootball-tournament-/`.
 8. To enable Google sign-in, open **Authentication → Sign In / Providers → Google** and enable it with a Google OAuth Client ID and Client Secret created in Google Cloud Console. Add this exact authorized redirect URI in Google Cloud: `https://mljecunjrfgicasyhwac.supabase.co/auth/v1/callback`. Also ensure the app URL above is in Supabase's allowed redirect URLs. Google sign-in will not work until these credentials are supplied in the Supabase dashboard.
 9. Register your own account in the app and verify the six-digit code sent to your email. Then run this SQL in Supabase SQL Editor, replacing the email:
-6. Register your own account in the app and verify the six-digit code sent to your email. Then run this SQL in Supabase SQL Editor, replacing the email:
    ```sql
    update public.profiles p set role = 'admin'
    from auth.users u
