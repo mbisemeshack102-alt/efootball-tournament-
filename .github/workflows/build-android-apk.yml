@@ -9,6 +9,7 @@ on:
       - "index.html"
       - "manifest.webmanifest"
       - "icon.svg"
+      - "sw.js"
       - "package.json"
       - "capacitor.config.json"
       - ".github/workflows/build-android-apk.yml"
