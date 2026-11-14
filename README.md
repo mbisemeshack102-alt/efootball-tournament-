@@ -36,36 +36,15 @@ Gaming tournament web app for Free Fire, PUBG Mobile, Call of Duty Mobile, eFoot
 - Live voice chat requires HTTPS, microphone permission, Supabase Realtime enabled, and a network that permits WebRTC. This first implementation uses a public STUN server only; reliable production voice across restrictive mobile networks needs a TURN service and real multi-device testing.
 - Gift delivery is an admin-recorded status, not an automatic payment or game-currency transfer.
 - ClickPesa BillPay payment submission is included for tournament entry fees. Set a fee when creating a tournament; players pay using Merchant Control Number 4078 and submit the ClickPesa transaction reference. An admin must verify the reference in the ClickPesa dashboard before the player is registered. Run `supabase/payments-clickpesa.sql` once in Supabase SQL Editor. This is manual verification, not an automatic ClickPesa API checkout/webhook; API access for the Kem merchant account was previously blocked pending KYC. Do not mark a payment paid unless it is confirmed in ClickPesa.
-- Text chat and APK packaging are not included yet.
+- Text chat is not included yet. The repository builds an installable debug APK through GitHub Actions; a signed production APK requires release signing.
 - Do not commit secret keys. If a service-role/secret key was previously shared, rotate it in Supabase.
 
 ## Android
-Once deployed over HTTPS, open the site in Chrome on Android and use **Add to Home screen**. The service worker is registered automatically on HTTPS for the installable PWA shell. A signed production APK requires a separate Android packaging/build and signing step; this repository does not yet contain a signed APK.
+Once deployed over HTTPS, open the site in Chrome on Android and use **Add to Home screen**. The service worker is registered automatically on HTTPS for the installable PWA shell and is bundled into Android builds. GitHub Actions builds an installable debug APK; a signed production APK requires release signing.
 
 
-## Notifications
-
-### Player notifications
-- The app now includes **Washa notification / Zima notification** controls in Settings.
-- Players must sign in, open the app over HTTPS in Chrome on Android, enable notifications, and accept the Android permission prompt on each device.
-- Admins can send a notification to all subscribed devices from **Admin → Tuma notification kwa wachezaji**.
-
-### Background push (works when the app is closed)
-1. Run `supabase/push-notifications.sql` once in Supabase SQL Editor. This creates the private `push_subscriptions` table.
-2. In Supabase **Edge Functions → Secrets**, set:
-   - `VAPID_PUBLIC_KEY` to the public key below.
-   - `VAPID_PRIVATE_KEY` to the private key generated for this project (never put it in GitHub or browser code).
-   - `VAPID_SUBJECT` to a contact such as `mailto:YOUR_ADMIN_EMAIL`.
-   - `KWG_WEBHOOK_SECRET` to a long random secret if database webhooks will be used.
-   - Ensure the standard `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` function secrets are present.
-3. The public VAPID key is already configured in `index.html`. Do not change it unless you generate a matching new key pair.
-4. Deploy the updated Edge Function code from `supabase/functions/push-notifications/index.ts` using Supabase **Edge Functions → push-notifications → Deploy** (or the Supabase CLI).
-5. Deploy the GitHub Pages site over HTTPS. Each player signs in and enables notifications in Settings.
-6. Optional automatic alerts for new tournament/result database rows require Supabase Database Webhooks (POST) to the function URL with header `x-kwg-webhook-secret` set to the same `KWG_WEBHOOK_SECRET`. Configure one INSERT webhook for `public.tournaments` and one for `public.tournament_results`.
-
-The Admin broadcast action is protected by a server-side check of the user's `profiles.role = 'admin'`. The Edge Function uses the service-role key only on the server. Test on real Android devices; browser permission, HTTPS, battery restrictions, and device settings affect delivery.
- 
 ## Required live checks before public launch
+- Push notifications were removed from the app, service worker, database setup, and Edge Function source. The service worker remains only for the offline app shell.
 - Run the complete `supabase/schema.sql` in the Supabase SQL Editor; the browser app cannot create these tables automatically.
 - Confirm a new email can receive and verify the six-digit OTP, then test login and logout.
 - Promote the intended owner account to `admin` with the SQL above; do not expose service-role credentials.
