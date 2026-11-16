@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "efootball-app",
-    "slug": "efootball-app",
+    "name": "EFOOTBALL ARENA",
+    "slug": "efootball-arena",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "efootballapp",
+    "scheme": "efootballarena",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
