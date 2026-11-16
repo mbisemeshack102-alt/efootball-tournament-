@@ -46,24 +46,6 @@ This command will move the starter code to the **example** directory and create 
 To learn more about developing your project with Expo, look at the following resources:
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Expo GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-
-
-## Push notifications (Android)
-
-The app includes an in-app notification setup screen at the **Taarifa** tab.
-
-1. From the `efootball-app` directory, run `npm install` to install dependencies and refresh `package-lock.json`.
-2. Run `npx eas-cli@latest init` and link this app to an Expo project. Keep the generated project ID in the app config; do not invent one.
-3. Configure Android FCM credentials in the linked Expo project, then create a development or production build. Remote push notifications are not supported in Expo Go on Android; use a development build or release APK.
-4. Install the build on a physical Android phone, open **Taarifa**, grant notification permission, and register the device.
-5. The **Tuma taarifa ya majaribio** button creates a local notification. Remote tournament alerts require a trusted server-side sender (for example, a Supabase Edge Function) to send Expo Push API messages to saved device tokens.
-
-Do not commit service-account JSON files, private keys, or other credentials to this repository.
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Learn to create an app that runs on Android, iOS, and web.
