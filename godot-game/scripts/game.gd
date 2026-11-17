@@ -163,7 +163,7 @@ func _build_hud() -> void:
 	_add_button(layer, "SHOOT", Vector2(855, 330), Vector2(78, 58), func(): _shoot_ball(), func(): pass)
 	_refresh_hud()
 
-func _add_button(parent: Control, caption: String, pos: Vector2, dimensions: Vector2, down: Callable, up: Callable) -> void:
+func _add_button(parent: Node, caption: String, pos: Vector2, dimensions: Vector2, down: Callable, up: Callable) -> void:
 	var button := Button.new()
 	button.text = caption
 	button.position = pos
