@@ -32,6 +32,8 @@ export default function AppTabs() {
       <Tabs.Screen name="login" options={{ href: null }} />
       <Tabs.Screen name="register" options={{ href: null }} />
       <Tabs.Screen name="verify" options={{ href: null }} />
+      <Tabs.Screen name="match" options={{ href: null }} />
+      <Tabs.Screen name="career" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
       <Tabs.Screen name="updates" options={{ href: null }} />
       <Tabs.Screen name="chat" options={{ href: null }} />
