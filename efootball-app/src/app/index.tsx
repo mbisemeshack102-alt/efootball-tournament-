@@ -114,9 +114,13 @@ export default function HomeScreen() {
           <Text style={styles.actionTitle}>🏆 Mashindano</Text>
           <Text style={styles.muted}>Cheza bila internet</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/career')}>
+          <Text style={styles.actionTitle}>👕 Career & Timu</Text>
+          <Text style={styles.muted}>Klabu, coins na formation</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/settings')}>
           <Text style={styles.actionTitle}>⚙️ Settings</Text>
-          <Text style={styles.muted}>Taarifa za kifaa</Text>
+          <Text style={styles.muted}>Mipangilio offline</Text>
         </TouchableOpacity>
       </View>
       {playerName ? (
