@@ -1,0 +1,37 @@
+name: Build KICKOFF WINS GIFTS Godot Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kickoff-wins-gifts-foundation
+    paths:
+      - "godot-game/**"
+      - ".github/workflows/godot-android-apk.yml"
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Godot 4
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+      - name: Install Android export templates
+        run: godot --headless --editor --path godot-game --quit
+      - name: Export debug APK
+        run: |
+          mkdir -p godot-game/build
+          godot --headless --path godot-game --export-debug Android godot-game/build/KICKOFF_WINS_GIFTS.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: KICKOFF-WINS-GIFTS-Android-APK
+          path: godot-game/build/KICKOFF_WINS_GIFTS.apk
+          if-no-files-found: error
+          retention-days: 14
