@@ -74,8 +74,13 @@ export default function HomeScreen() {
           </View>
         )}
         {playerName ? (
-          <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/explore')}>
-            <Text style={styles.primaryText}>ANGALIA MASHINDANO →</Text>
+          <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/match')}>
+            <Text style={styles.primaryText}>⚽ CHEZA MECHI SASA →</Text>
+          </TouchableOpacity>
+        ) : null}
+        {playerName ? (
+          <TouchableOpacity style={[styles.primaryButton, { marginTop: 10, backgroundColor: '#263B4C' }]} onPress={() => router.push('/explore')}>
+            <Text style={[styles.primaryText, { color: '#FFFFFF' }]}>ANGALIA MASHINDANO →</Text>
           </TouchableOpacity>
         ) : null}
       </View>
