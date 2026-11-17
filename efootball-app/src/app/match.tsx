@@ -13,23 +13,44 @@ export default function MatchScreen() {
   const [sprinting, setSprinting] = useState(false);
   const [message, setMessage] = useState('MECHI INAENDELEA');
   const [possession, setPossession] = useState(true);
+  const [difficulty, setDifficulty] = useState('Kawaida');
+  const [finished, setFinished] = useState(false);
   const moveTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const aiTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    AsyncStorage.getItem('kwg.offline.player').then((name) => {
+    AsyncStorage.multiGet(['kwg.offline.player', 'kwg.offline.preferences']).then(([playerEntry, prefsEntry]) => {
+      const name = playerEntry[1];
+      if (prefsEntry[1]) {
+        try { const prefs = JSON.parse(prefsEntry[1]); setDifficulty(prefs.difficulty || 'Kawaida'); } catch { /* ignore invalid local settings */ }
+      }
       if (name) setMessage(`KARIBU ${name.toUpperCase()} • MECHI INAENDELEA`);
     });
-    const clock = setInterval(() => setSeconds((s) => s + 1), 1000);
+    const clock = setInterval(() => setSeconds((s) => Math.min(90, s + 1)), 1000);
     aiTimer.current = setInterval(() => {
-      setBall((b) => ({ x: clamp(b.x + (Math.random() - 0.5) * 1.8, 8, 92), y: clamp(b.y - 0.35, 8, 92) }));
+      setBall((b) => ({ x: clamp(b.x + (Math.random() - 0.5) * (difficulty === 'Ngumu' ? 5 : difficulty === 'Rahisi' ? 1.4 : 2.8), 8, 92), y: clamp(b.y - (difficulty === 'Ngumu' ? 1.2 : 0.65), 8, 92) }));
     }, 1800);
     return () => {
       clearInterval(clock);
       if (moveTimer.current) clearInterval(moveTimer.current);
       if (aiTimer.current) clearInterval(aiTimer.current);
     };
-  }, []);
+  }, [difficulty]);
+
+  useEffect(() => {
+    if (seconds < 90 || finished) return;
+    setFinished(true);
+    const saveResult = async () => {
+      const raw = await AsyncStorage.getItem('kwg.offline.career');
+      const old = raw ? JSON.parse(raw) : { club: 'KWG FC', coins: 1000, matches: 0, wins: 0, draws: 0, losses: 0, formation: '4-3-3', level: 1 };
+      const won = score[0] > score[1];
+      const drawn = score[0] === score[1];
+      const next = { ...old, matches: (old.matches || 0) + 1, wins: (old.wins || 0) + (won ? 1 : 0), draws: (old.draws || 0) + (drawn ? 1 : 0), losses: (old.losses || 0) + (!won && !drawn ? 1 : 0), coins: (old.coins || 0) + (won ? 150 : drawn ? 75 : 25), level: Math.max(old.level || 1, Math.floor(((old.matches || 0) + 1) / 5) + 1) };
+      await AsyncStorage.setItem('kwg.offline.career', JSON.stringify(next));
+      setMessage(`MECHI IMEISHA • ${won ? 'USHINDI!' : drawn ? 'SARE' : 'JARIBU TENA'} • COINS +${won ? 150 : drawn ? 75 : 25}`);
+    };
+    saveResult();
+  }, [seconds, finished, score]);
 
   const startMove = (dx: number, dy: number) => {
     if (moveTimer.current) clearInterval(moveTimer.current);
@@ -51,7 +72,7 @@ export default function MatchScreen() {
     moveTimer.current = null;
   };
   const shoot = () => {
-    if (!possession) { setMessage('KARIBIA KWANZA NA UCHUKUE MPIRA'); return; }
+    if (finished) return;\n    if (!possession) { setMessage('KARIBIA KWANZA NA UCHUKUE MPIRA'); return; }
     if (player.y < 32 && player.x > 34 && player.x < 66) {
       setScore(([a, b]) => [a + 1, b]);
       setMessage('GOOOOOOL! UMEFUNGAAA!');
@@ -64,7 +85,7 @@ export default function MatchScreen() {
     }
   };
   const pass = () => {
-    if (!possession) { setMessage('HAUNA MPIRA'); return; }
+    if (finished) return;\n    if (!possession) { setMessage('HAUNA MPIRA'); return; }
     setBall({ x: clamp(player.x + 13, 8, 92), y: clamp(player.y - 13, 8, 92) });
     setPossession(false);
     setMessage('PASI IMETOKA');
@@ -76,7 +97,7 @@ export default function MatchScreen() {
   };
   const reset = () => Alert.alert('Anza upya?', 'Utaanza mechi mpya.', [
     { text: 'Ghairi', style: 'cancel' },
-    { text: 'Anza', onPress: () => { setScore([0, 0]); setSeconds(0); setPlayer({ x: 50, y: 73 }); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
+    { text: 'Anza', onPress: () => { setScore([0, 0]); setSeconds(0); setFinished(false); setPlayer({ x: 50, y: 73 }); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
   ]);
   const time = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
@@ -96,7 +117,7 @@ export default function MatchScreen() {
         <Text style={styles.score}>{score[0]} - {score[1]}</Text>
         <Text style={styles.team}>CPU FC</Text>
       </View>
-      <Text style={styles.clock}>{time}  •  1ST HALF</Text>
+      <Text style={styles.clock}>{time} / 01:30  •  {difficulty.toUpperCase()} AI</Text>
       <Text style={styles.status}>{message}</Text>
       <View style={styles.pitch}>
         <View style={styles.halfLine} />
@@ -124,7 +145,7 @@ export default function MatchScreen() {
           <Pressable onPressIn={() => setSprinting(true)} onPressOut={() => setSprinting(false)} style={[styles.action, styles.sprint, sprinting && styles.sprintOn]}><Text style={styles.actionText}>⚡ SPRINT</Text></Pressable>
         </View>
       </View>
-      <Text style={styles.hint}>SHIKILIA mishale kusogeza mchezaji • Shikilia SPRINT kuongeza kasi</Text>
+      <Text style={styles.hint}>SHIKILIA mishale kusogeza mchezaji • Shikilia SPRINT kuongeza kasi • Dakika 1:30 za mechi</Text>
     </SafeAreaView>
   );
 }
