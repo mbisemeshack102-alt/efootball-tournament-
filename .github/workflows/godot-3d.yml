@@ -1,0 +1,26 @@
+name: Validate offline Godot 3D game
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - kickoff-wins-gifts-foundation
+    paths:
+      - "godot-game/**"
+      - ".github/workflows/godot-3d.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Godot 4
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+      - name: Import and validate project
+        run: godot --headless --editor --path godot-game --quit
+      - name: Run project startup check
+        run: timeout 15s godot --headless --path godot-game --quit-after 5
