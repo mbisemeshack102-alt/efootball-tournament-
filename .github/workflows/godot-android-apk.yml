@@ -39,10 +39,27 @@ jobs:
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.3.stable/"
       - name: Import and validate project
         run: godot --headless --editor --path godot-game --quit
+      - name: Configure Android SDK and debug signing key for Godot
+        run: |
+          mkdir -p "$HOME/.config/godot" "$HOME/.android"
+          keytool -genkeypair -v \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android -alias androiddebugkey -keypass android \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10000
+          cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+          
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/debug_keystore = "$HOME/.android/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          EOF
       - name: Export debug APK
         run: |
           mkdir -p godot-game/build
-          godot --headless --path godot-game --export-debug Android godot-game/build/KICKOFF_WINS_GIFTS.apk
+          godot --headless --verbose --path godot-game --export-debug Android godot-game/build/KICKOFF_WINS_GIFTS.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
