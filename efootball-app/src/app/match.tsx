@@ -72,7 +72,8 @@ export default function MatchScreen() {
     moveTimer.current = null;
   };
   const shoot = () => {
-    if (finished) return;\n    if (!possession) { setMessage('KARIBIA KWANZA NA UCHUKUE MPIRA'); return; }
+    if (finished) return;
+    if (!possession) { setMessage('KARIBIA KWANZA NA UCHUKUE MPIRA'); return; }
     if (player.y < 32 && player.x > 34 && player.x < 66) {
       setScore(([a, b]) => [a + 1, b]);
       setMessage('GOOOOOOL! UMEFUNGAAA!');
@@ -85,7 +86,8 @@ export default function MatchScreen() {
     }
   };
   const pass = () => {
-    if (finished) return;\n    if (!possession) { setMessage('HAUNA MPIRA'); return; }
+    if (finished) return;
+    if (!possession) { setMessage('HAUNA MPIRA'); return; }
     setBall({ x: clamp(player.x + 13, 8, 92), y: clamp(player.y - 13, 8, 92) });
     setPossession(false);
     setMessage('PASI IMETOKA');
