@@ -68,7 +68,7 @@ jobs:
       - name: Export debug APK
         run: |
           mkdir -p godot-game/build
-          godot --headless --verbose --path godot-game --export-debug Android godot-game/build/KICKOFF_WINS_GIFTS.apk
+          godot --headless --verbose --path godot-game --export-debug Android build/KICKOFF_WINS_GIFTS.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
