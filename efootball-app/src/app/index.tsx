@@ -53,36 +53,12 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.hero}>
-        <Text style={styles.pill}>HAKUNA AKAUNTI • HAKUNA GMAIL</Text>
-        <Text style={styles.heroTitle}>{playerName ? `Karibu, ${playerName}!` : 'Cheza. Shindana. Shinda.'}</Text>
-        <Text style={styles.heroCopy}>Michezo na mashindano ya ndani ya simu yako. Taarifa zako zinahifadhiwa kwenye kifaa hiki.</Text>
-        {!playerName && ready && (
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Andika jina la mchezaji"
-              placeholderTextColor="#91A0B6"
-              value={draftName}
-              onChangeText={setDraftName}
-              maxLength={30}
-              returnKeyType="done"
-              onSubmitEditing={savePlayer}
-            />
-            <TouchableOpacity style={styles.primaryButton} onPress={savePlayer}>
-              <Text style={styles.primaryText}>ANZA BILA AKAUNTI →</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {playerName ? (
-          <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/match')}>
-            <Text style={styles.primaryText}>⚽ CHEZA MECHI SASA →</Text>
-          </TouchableOpacity>
-        ) : null}
-        {playerName ? (
-          <TouchableOpacity style={[styles.primaryButton, { marginTop: 10, backgroundColor: '#263B4C' }]} onPress={() => router.push('/explore')}>
-            <Text style={[styles.primaryText, { color: '#FFFFFF' }]}>ANGALIA MASHINDANO →</Text>
-          </TouchableOpacity>
-        ) : null}
+        <Text style={styles.pill}>HAKUNA AKAUNTI • HAKUNA GMAIL • OFFLINE</Text>
+        <Text style={styles.heroTitle}>Simamia mashindano yote.</Text>
+        <Text style={styles.heroCopy}>Tengeneza mashindano ya Free Fire, PUBG Mobile, eFootball, Call of Duty na michezo mingine. Sajili washiriki, rekodi matokeo na fuatilia msimamo bila internet.</Text>
+        <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/explore')}>
+          <Text style={styles.primaryText}>FUNGUA USIMAMIZI WA MASHINDANO →</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.sectionHeading}>
@@ -90,10 +66,10 @@ export default function HomeScreen() {
         <Text style={styles.sectionHint}>GAMES</Text>
       </View>
       {[
-        { name: 'eFootball', detail: 'Mashindano ya mpira', icon: '⚽' },
-        { name: 'Free Fire', detail: 'Mashindano ya mapigano', icon: '🔥' },
-        { name: 'PUBG Mobile', detail: 'Battle Royale', icon: '🎯' },
-        { name: 'Call of Duty', detail: 'Mapambano ya timu', icon: '🎮' },
+        { name: 'eFootball', detail: 'Ligi na mashindano', icon: '⚽' },
+        { name: 'Free Fire', detail: 'Solo, Duo na Squad', icon: '🔥' },
+        { name: 'PUBG Mobile', detail: 'Mashindano ya vikosi', icon: '🎯' },
+        { name: 'Call of Duty Mobile', detail: 'Mashindano ya timu', icon: '🎮' },
       ].map((game) => (
         <TouchableOpacity key={game.name} style={styles.gameCard} onPress={() => router.push('/explore')}>
           <Text style={styles.gameIcon}>{game.icon}</Text>
@@ -112,11 +88,11 @@ export default function HomeScreen() {
       <View style={styles.grid}>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/explore')}>
           <Text style={styles.actionTitle}>🏆 Mashindano</Text>
-          <Text style={styles.muted}>Cheza bila internet</Text>
+          <Text style={styles.muted}>Simamia bila internet</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/career')}>
-          <Text style={styles.actionTitle}>👕 Career & Timu</Text>
-          <Text style={styles.muted}>Klabu, coins na formation</Text>
+          <Text style={styles.actionTitle}>👥 Washiriki & Timu</Text>
+          <Text style={styles.muted}>Usajili na takwimu</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/settings')}>
           <Text style={styles.actionTitle}>⚙️ Settings</Text>
@@ -126,7 +102,7 @@ export default function HomeScreen() {
       {playerName ? (
         <TouchableOpacity onPress={changePlayer}><Text style={styles.changePlayer}>Badilisha jina la mchezaji</Text></TouchableOpacity>
       ) : null}
-      <Text style={styles.footer}>KICKOFF WINS GIFTS • OFFLINE EDITION</Text>
+      <Text style={styles.footer}>KICK OFF • OFFLINE TOURNAMENT MANAGER</Text>
     </ScrollView>
   );
 }
