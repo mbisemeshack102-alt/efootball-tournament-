@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 const KEY='kwg.offline.career';
 export default function CareerScreen(){
  const [data,setData]=useState({club:'KWG FC',coins:1000,matches:0,wins:0,draws:0,losses:0,formation:'4-3-3',level:1});
- useEffect(()=>{AsyncStorage.getItem(KEY).then(v=>{if(v)setData({...data,...JSON.parse(v)});});},[]);
+ useEffect(()=>{AsyncStorage.getItem(KEY).then(v=>{if(v){const saved=JSON.parse(v);setData(current=>({...current,...saved}));}}).catch(()=>{});},[]);
  const choose=(formation:string)=>{const next={...data,formation};setData(next);AsyncStorage.setItem(KEY,JSON.stringify(next));};
  return <ScrollView style={s.screen} contentContainerStyle={s.content}>
   <Text style={s.kicker}>OFFLINE CAREER MODE</Text><Text style={s.title}>Klabu yangu</Text>
