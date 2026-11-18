@@ -1,42 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import SportsLogo from '@/components/sports-logo';
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-const PLAYER_KEY = 'kwg.offline.player';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
-  const [playerName, setPlayerName] = useState('');
-  const [draftName, setDraftName] = useState('');
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    AsyncStorage.getItem(PLAYER_KEY)
-      .then((saved) => {
-        if (saved) {
-          setPlayerName(saved);
-          setDraftName(saved);
-        }
-      })
-      .finally(() => setReady(true));
-  }, []);
-
-  const savePlayer = async () => {
-    const name = draftName.trim();
-    if (!name) {
-      Alert.alert('Weka jina', 'Andika jina lako ili kuanza kucheza.');
-      return;
-    }
-    await AsyncStorage.setItem(PLAYER_KEY, name);
-    setPlayerName(name);
-    Alert.alert('Karibu!', `Karibu kwenye KICKOFF WINS GIFTS, ${name}.`);
-  };
-
-  const changePlayer = () => {
-    setDraftName(playerName);
-    setPlayerName('');
-  };
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -99,9 +65,6 @@ export default function HomeScreen() {
           <Text style={styles.muted}>Mipangilio offline</Text>
         </TouchableOpacity>
       </View>
-      {playerName ? (
-        <TouchableOpacity onPress={changePlayer}><Text style={styles.changePlayer}>Badilisha jina la mchezaji</Text></TouchableOpacity>
-      ) : null}
       <Text style={styles.footer}>KICK OFF • OFFLINE TOURNAMENT MANAGER</Text>
     </ScrollView>
   );
@@ -121,7 +84,6 @@ const styles = StyleSheet.create({
   pill: { alignSelf: 'flex-start', color: '#B8F34A', backgroundColor: '#253A2B', overflow: 'hidden', borderRadius: 20, paddingHorizontal: 11, paddingVertical: 6, fontSize: 9, letterSpacing: 1, fontWeight: '800', marginBottom: 17 },
   heroTitle: { color: '#FFFFFF', fontSize: 26, fontWeight: '900', marginBottom: 8 },
   heroCopy: { color: '#B8C5D3', lineHeight: 21, fontSize: 14, marginBottom: 20 },
-  input: { backgroundColor: '#0D1723', borderWidth: 1, borderColor: '#405468', borderRadius: 12, padding: 14, color: '#FFFFFF', marginBottom: 12 },
   primaryButton: { backgroundColor: '#B8F34A', borderRadius: 12, paddingVertical: 15, alignItems: 'center' },
   primaryText: { color: '#101A12', fontWeight: '900', letterSpacing: 0.7 },
   sectionHeading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 13, marginTop: 4 },
@@ -136,6 +98,5 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
   actionCard: { width: '48%', backgroundColor: '#111C29', borderRadius: 14, borderWidth: 1, borderColor: '#1F3040', padding: 15, marginBottom: 10, minHeight: 88, justifyContent: 'center' },
   actionTitle: { color: '#F4F7FC', fontWeight: '800', fontSize: 14, marginBottom: 6 },
-  changePlayer: { color: '#B8F34A', textAlign: 'center', marginTop: 14, fontWeight: '700' },
   footer: { color: '#586A7E', fontSize: 9, textAlign: 'center', letterSpacing: 1.1, marginTop: 22 },
 });
