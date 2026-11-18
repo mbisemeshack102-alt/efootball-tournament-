@@ -37,8 +37,6 @@ jobs:
           mkdir -p /tmp/godot-templates
           unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.3.stable/"
-      - name: Install Android Gradle build template into project
-        run: godot --headless --path godot-game --install-android-build-template
       - name: Import and validate project
         run: godot --headless --editor --path godot-game --quit
       - name: Export debug APK
