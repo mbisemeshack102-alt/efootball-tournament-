@@ -14,7 +14,8 @@ export default function MatchScreen() {
   const [message, setMessage] = useState('MECHI INAENDELEA');
   const [possession, setPossession] = useState(true);
   const [difficulty, setDifficulty] = useState('Kawaida');
-  const [finished, setFinished] = useState(false);
+  const resultSaved = useRef(false);
+  const finished = seconds >= 90;
   const moveTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const aiTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -38,8 +39,8 @@ export default function MatchScreen() {
   }, [difficulty]);
 
   useEffect(() => {
-    if (seconds < 90 || finished) return;
-    setFinished(true);
+    if (seconds < 90 || resultSaved.current) return;
+    resultSaved.current = true;
     const saveResult = async () => {
       const raw = await AsyncStorage.getItem('kwg.offline.career');
       const old = raw ? JSON.parse(raw) : { club: 'KWG FC', coins: 1000, matches: 0, wins: 0, draws: 0, losses: 0, formation: '4-3-3', level: 1 };
@@ -50,7 +51,7 @@ export default function MatchScreen() {
       setMessage(`MECHI IMEISHA • ${won ? 'USHINDI!' : drawn ? 'SARE' : 'JARIBU TENA'} • COINS +${won ? 150 : drawn ? 75 : 25}`);
     };
     saveResult();
-  }, [seconds, finished, score]);
+  }, [seconds, score]);
 
   const startMove = (dx: number, dy: number) => {
     if (moveTimer.current) clearInterval(moveTimer.current);
@@ -99,7 +100,7 @@ export default function MatchScreen() {
   };
   const reset = () => Alert.alert('Anza upya?', 'Utaanza mechi mpya.', [
     { text: 'Ghairi', style: 'cancel' },
-    { text: 'Anza', onPress: () => { setScore([0, 0]); setSeconds(0); setFinished(false); setPlayer({ x: 50, y: 73 }); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
+    { text: 'Anza', onPress: () => { setScore([0, 0]); resultSaved.current = false; setSeconds(0); setPlayer({ x: 50, y: 73 }); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
   ]);
   const time = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
