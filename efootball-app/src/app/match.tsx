@@ -7,6 +7,7 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 
 export default function MatchScreen() {
   const [player, setPlayer] = useState({ x: 50, y: 73 });
+  const playerRef = useRef({ x: 50, y: 73 });
   const [ball, setBall] = useState({ x: 50, y: 70 });
   const [score, setScore] = useState([0, 0]);
   const [seconds, setSeconds] = useState(0);
@@ -55,16 +56,17 @@ export default function MatchScreen() {
 
   const startMove = (dx: number, dy: number) => {
     if (moveTimer.current) clearInterval(moveTimer.current);
-    const step = () => setPlayer((p) => {
+    const step = () => {
       const speed = sprinting ? 2.2 : 0.9;
-      const next = { x: clamp(p.x + dx * speed, 8, 92), y: clamp(p.y + dy * speed, 8, 92) };
-      setBall((b) => {
-        const close = Math.hypot(b.x - next.x, b.y - next.y) < 8;
-        if (close) setPossession(true);
-        return close ? { x: next.x + dx * 2, y: next.y + dy * 2 } : b;
-      });
-      return next;
-    });
+      const next = { x: clamp(playerRef.current.x + dx * speed, 8, 92), y: clamp(playerRef.current.y + dy * speed, 8, 92) };
+      playerRef.current = next;
+      setPlayer(next);
+      const close = Math.hypot(ball.x - next.x, ball.y - next.y) < 8;
+      if (close) {
+        setPossession(true);
+        setBall({ x: next.x + dx * 2, y: next.y + dy * 2 });
+      }
+    };
     step();
     moveTimer.current = setInterval(step, 75);
   };
@@ -78,7 +80,8 @@ export default function MatchScreen() {
     if (player.y < 32 && player.x > 34 && player.x < 66) {
       setScore(([a, b]) => [a + 1, b]);
       setMessage('GOOOOOOL! UMEFUNGAAA!');
-      setPlayer({ x: 50, y: 73 });
+      playerRef.current = { x: 50, y: 73 };
+      setPlayer(playerRef.current);
       setBall({ x: 50, y: 70 });
     } else {
       setBall({ x: clamp(player.x + (50 - player.x) * 0.45, 8, 92), y: 7 });
@@ -100,7 +103,7 @@ export default function MatchScreen() {
   };
   const reset = () => Alert.alert('Anza upya?', 'Utaanza mechi mpya.', [
     { text: 'Ghairi', style: 'cancel' },
-    { text: 'Anza', onPress: () => { setScore([0, 0]); resultSaved.current = false; setSeconds(0); setPlayer({ x: 50, y: 73 }); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
+    { text: 'Anza', onPress: () => { setScore([0, 0]); resultSaved.current = false; setSeconds(0); playerRef.current = { x: 50, y: 73 }; setPlayer(playerRef.current); setBall({ x: 50, y: 70 }); setPossession(true); setMessage('MECHI INAENDELEA'); } },
   ]);
   const time = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 
