@@ -33,8 +33,15 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # Install current SDK components explicitly. Do not request the obsolete
+      # standalone "tools" package (it causes sdkmanager to exit with code 1).
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: |
+            platform-tools
+            platforms;android-36
+            build-tools;36.0.0
 
       - name: Install dependencies
         run: npm ci
